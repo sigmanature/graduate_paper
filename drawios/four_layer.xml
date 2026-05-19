@@ -1,0 +1,97 @@
+<mxGraphModel dx="3260" dy="795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+  <root>
+    <mxCell id="0" />
+    <mxCell id="1" parent="0" />
+    
+    <!-- 深暗灰蓝色背景 -->
+    <mxCell id="background" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1B2631;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="-200" y="1150" width="1300" height="1200" as="geometry" />
+    </mxCell>
+    
+    <!-- 总标题 -->
+    <mxCell id="mainTitle" value="Linux File's Four Layer Architecture" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=36;fontColor=#FFFFFF;" vertex="1" parent="1">
+      <mxGeometry x="250" y="1170" width="480" height="50" as="geometry" />
+    </mxCell>
+    
+    <!-- User Space Layer -->
+    <mxCell id="userSpaceLayer" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6F3FF;fillOpacity=40;strokeColor=#4A90E2;strokeWidth=3;gradientColor=#B8E0FF;gradientDirection=south;" vertex="1" parent="1">
+      <mxGeometry x="-120" y="1250" width="1170" height="150" as="geometry" />
+    </mxCell>
+    
+    <!-- Filesystem Layer -->
+    <mxCell id="filesystemLayer" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE6E6;fillOpacity=40;strokeColor=#E74C3C;strokeWidth=3;gradientColor=#FFB3B3;gradientDirection=south;" vertex="1" parent="1">
+      <mxGeometry x="-120" y="1550" width="1170" height="200" as="geometry" />
+    </mxCell>
+    
+    <!-- Memory Layer -->
+    <mxCell id="memoryLayer" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6FFE6;fillOpacity=40;strokeColor=#27AE60;strokeWidth=3;gradientColor=#B3FFB3;gradientDirection=south;" vertex="1" parent="1">
+      <mxGeometry x="-120" y="1900" width="1170" height="170" as="geometry" />
+    </mxCell>
+    
+    <!-- Bio Layer -->
+    <mxCell id="bioLayer" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F0E6FF;fillOpacity=40;strokeColor=#9B59B6;strokeWidth=3;gradientColor=#E0B3FF;gradientDirection=south;" vertex="1" parent="1">
+      <mxGeometry x="-120" y="2200" width="1170" height="170" as="geometry" />
+    </mxCell>
+    
+    <!-- Layer Labels -->
+    <mxCell id="userSpaceLabel" value="User Space" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=36;fontColor=#FFFFFF;" vertex="1" parent="1">
+      <mxGeometry x="385" y="1315" width="230" height="50" as="geometry" />
+    </mxCell>
+    
+    <mxCell id="filesystemLabel" value="Filesystem Layer" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=36;fontColor=#FFFFFF;" vertex="1" parent="1">
+      <mxGeometry x="335" y="1640" width="330" height="50" as="geometry" />
+    </mxCell>
+    
+    <mxCell id="memoryLabel" value="Memory Layer" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=36;fontColor=#FFFFFF;" vertex="1" parent="1">
+      <mxGeometry x="365" y="1975" width="270" height="50" as="geometry" />
+    </mxCell>
+    
+    <mxCell id="bioLabel" value="Bio Layer" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1;fontSize=36;fontColor=#FFFFFF;" vertex="1" parent="1">
+      <mxGeometry x="415" y="2275" width="170" height="50" as="geometry" />
+    </mxCell>
+    
+    <!-- Very Wide Vertical Transparent Arrows between layers -->
+    <!-- User Space to Filesystem -->
+    <mxCell id="arrow1" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FFFFFF;strokeWidth=8;fillColor=none;" edge="1" parent="1">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <mxPoint x="500" y="1420" as="sourcePoint" />
+        <mxPoint x="500" y="1530" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="arrow1Fill" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FFFFFF;strokeWidth=120;fillColor=none;opacity=15;" edge="1" parent="1">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <mxPoint x="500" y="1420" as="sourcePoint" />
+        <mxPoint x="500" y="1530" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    
+    <!-- Filesystem to Memory -->
+    <mxCell id="arrow2" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FFFFFF;strokeWidth=8;fillColor=none;" edge="1" parent="1">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <mxPoint x="500" y="1770" as="sourcePoint" />
+        <mxPoint x="500" y="1880" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="arrow2Fill" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FFFFFF;strokeWidth=120;fillColor=none;opacity=15;" edge="1" parent="1">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <mxPoint x="500" y="1770" as="sourcePoint" />
+        <mxPoint x="500" y="1880" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    
+    <!-- Memory to Bio -->
+    <mxCell id="arrow3" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FFFFFF;strokeWidth=8;fillColor=none;" edge="1" parent="1">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <mxPoint x="500" y="2090" as="sourcePoint" />
+        <mxPoint x="500" y="2180" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    <mxCell id="arrow3Fill" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FFFFFF;strokeWidth=120;fillColor=none;opacity=15;" edge="1" parent="1">
+      <mxGeometry width="50" height="50" relative="1" as="geometry">
+        <mxPoint x="500" y="2090" as="sourcePoint" />
+        <mxPoint x="500" y="2180" as="targetPoint" />
+      </mxGeometry>
+    </mxCell>
+    
+  </root>
+</mxGraphModel>

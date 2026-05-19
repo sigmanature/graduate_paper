@@ -1,0 +1,147 @@
+<mxGraphModel dx="1600" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <mxCell id="title" value="第二章主架构图：一次 16KB buffered read 在各层的表示与映射关系" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=22;fontStyle=1;fontColor=#2F3B52;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="240" y="20" width="1120" height="30" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="subtitle" value="同一段文件数据在用户态、页缓存、文件系统块、bio/bvec 与闪存设备中的抽象形式并不相同" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#6B7280;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="280" y="50" width="1040" height="24" as="geometry"/>
+    </mxCell>
+
+    <!-- Bands -->
+    <mxCell id="band1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EEF4FB;strokeColor=#4F81BD;strokeWidth=1.8;" vertex="1" parent="1">
+      <mxGeometry x="80" y="90" width="1280" height="95" as="geometry"/>
+    </mxCell>
+    <mxCell id="band2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3F7FD;strokeColor=#5B9BD5;strokeWidth=1.8;" vertex="1" parent="1">
+      <mxGeometry x="80" y="205" width="1280" height="135" as="geometry"/>
+    </mxCell>
+    <mxCell id="band3" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F9F4F2;strokeColor=#C55A11;strokeWidth=1.8;" vertex="1" parent="1">
+      <mxGeometry x="80" y="360" width="1280" height="135" as="geometry"/>
+    </mxCell>
+    <mxCell id="band4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F4F2FA;strokeColor=#7E57C2;strokeWidth=1.8;" vertex="1" parent="1">
+      <mxGeometry x="80" y="515" width="1280" height="145" as="geometry"/>
+    </mxCell>
+    <mxCell id="band5" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F7F7F7;strokeColor=#7F7F7F;strokeWidth=1.8;" vertex="1" parent="1">
+      <mxGeometry x="80" y="680" width="1280" height="125" as="geometry"/>
+    </mxCell>
+
+    <!-- Left labels -->
+    <mxCell id="l1" value="用户态请求层" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DCEAF7;strokeColor=#4F81BD;strokeWidth=1.2;fontSize=14;fontStyle=1;fontColor=#2F3B52;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="95" y="102" width="110" height="28" as="geometry"/>
+    </mxCell>
+    <mxCell id="l2" value="Page Cache 层" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#DCEAF7;strokeColor=#5B9BD5;strokeWidth=1.2;fontSize=14;fontStyle=1;fontColor=#2F3B52;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="95" y="217" width="110" height="28" as="geometry"/>
+    </mxCell>
+    <mxCell id="l3" value="F2FS 块映射层" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE4D6;strokeColor=#C55A11;strokeWidth=1.2;fontSize=14;fontStyle=1;fontColor=#6A3906;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="95" y="372" width="110" height="28" as="geometry"/>
+    </mxCell>
+    <mxCell id="l4" value="bio / bvec 层" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ECE6FA;strokeColor=#7E57C2;strokeWidth=1.2;fontSize=14;fontStyle=1;fontColor=#4C3A72;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="95" y="527" width="110" height="28" as="geometry"/>
+    </mxCell>
+    <mxCell id="l5" value="闪存设备层" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F3F3F3;strokeColor=#7F7F7F;strokeWidth=1.2;fontSize=14;fontStyle=1;fontColor=#4B5563;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="95" y="692" width="110" height="28" as="geometry"/>
+    </mxCell>
+
+    <!-- Band 1 -->
+    <mxCell id="readbox" value="read(fd, buf, offset = 0, length = 16KB)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#4F81BD;strokeWidth=1.4;fontSize=15;fontStyle=1;fontColor=#1F2937;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="270" y="112" width="470" height="36" as="geometry"/>
+    </mxCell>
+    <mxCell id="fileRange" value="文件字节区间：[0, 16KB)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF2FB;strokeColor=#4F81BD;strokeWidth=1.0;fontSize=13;fontColor=#2F3B52;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="790" y="112" width="220" height="36" as="geometry"/>
+    </mxCell>
+    <mxCell id="vfsNote" value="VFS / generic_file_read_iter 接收的是文件偏移与字节长度" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#6B7280;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="270" y="152" width="740" height="18" as="geometry"/>
+    </mxCell>
+
+    <!-- Band 2 page cache -->
+    <mxCell id="pcNote" value="page cache 以页索引组织缓存对象：index = offset / 4096；在 4KB 路径下，同一 16KB 请求会被拆成 4 个独立 page" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#425466;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="270" y="220" width="950" height="18" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="pcContainer" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#5B9BD5;strokeWidth=1.2;" vertex="1" parent="1">
+      <mxGeometry x="270" y="250" width="990" height="62" as="geometry"/>
+    </mxCell>
+
+    <!-- 4 page cells -->
+    <mxCell id="p0" value="page&lt;br&gt;idx=0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF2FB;strokeColor=#5B9BD5;fontSize=11;fontColor=#2F3B52;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1"><mxGeometry x="440" y="264" width="70" height="34" as="geometry"/></mxCell>
+    <mxCell id="p1" value="page&lt;br&gt;1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF2FB;strokeColor=#5B9BD5;fontSize=11;fontColor=#2F3B52;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1"><mxGeometry x="560" y="264" width="70" height="34" as="geometry"/></mxCell>
+    <mxCell id="p2" value="page&lt;br&gt;2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF2FB;strokeColor=#5B9BD5;fontSize=11;fontColor=#2F3B52;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1"><mxGeometry x="680" y="264" width="70" height="34" as="geometry"/></mxCell>
+    <mxCell id="p3" value="page&lt;br&gt;3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#EAF2FB;strokeColor=#5B9BD5;fontSize=11;fontColor=#2F3B52;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1"><mxGeometry x="800" y="264" width="70" height="34" as="geometry"/></mxCell>
+    <mxCell id="pcBottom" value="4 个 4KB page，分别维护 PG_locked / PG_uptodate / PG_dirty 等状态" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#6B7280;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="410" y="316" width="490" height="16" as="geometry"/>
+    </mxCell>
+
+    <!-- Band 3 F2FS -->
+    <mxCell id="fsNote" value="F2FS 将同一 16KB 数据表示为 4 个逻辑块，并通过 f2fs_map_blocks / NAT / 节点树返回块级映射结果" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#6A3906;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="270" y="375" width="960" height="18" as="geometry"/>
+    </mxCell>
+    <mxCell id="fsContainer" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#C55A11;strokeWidth=1.2;" vertex="1" parent="1">
+      <mxGeometry x="270" y="405" width="990" height="62" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="b0" value="block 0&lt;br&gt;pbn P" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDF0E9;strokeColor=#C55A11;fontSize=11;fontColor=#6A3906;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1"><mxGeometry x="440" y="419" width="70" height="34" as="geometry"/></mxCell>
+    <mxCell id="b1" value="block 1&lt;br&gt;P+1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDF0E9;strokeColor=#C55A11;fontSize=11;fontColor=#6A3906;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1"><mxGeometry x="560" y="419" width="70" height="34" as="geometry"/></mxCell>
+    <mxCell id="b2" value="block 2&lt;br&gt;P+2" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDF0E9;strokeColor=#C55A11;fontSize=11;fontColor=#6A3906;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1"><mxGeometry x="680" y="419" width="70" height="34" as="geometry"/></mxCell>
+    <mxCell id="b3" value="block 3&lt;br&gt;P+3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FDF0E9;strokeColor=#C55A11;fontSize=11;fontColor=#6A3906;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1"><mxGeometry x="800" y="419" width="70" height="34" as="geometry"/></mxCell>
+    <mxCell id="natNote" value="节点树 / NAT 负责 offset → block → pbn 的块级解释" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#8A4B08;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="410" y="471" width="500" height="16" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="midNode" value="连续物理&lt;br&gt;块地址" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7E57C2;strokeWidth=1.2;fontSize=12;fontColor=#4C3A72;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="965" y="410" width="52" height="58" as="geometry"/>
+    </mxCell>
+
+    <!-- Band 4 bio -->
+    <mxCell id="bioNote" value="块层以 bio 为提交载体，并通过 bvec/multi-page bvec 将多个页段组织为更大的 I/O 请求" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#4C3A72;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="270" y="530" width="960" height="18" as="geometry"/>
+    </mxCell>
+    <mxCell id="bioOuter" value="bio：bi_sector = P * 8，bi_size = 16KB" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7E57C2;strokeWidth=1.4;fontSize=13;fontStyle=1;fontColor=#4C3A72;align=center;verticalAlign=top;spacingTop=8;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="300" y="560" width="930" height="72" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="v0" value="bvec 0&lt;br&gt;pages 0-3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F4F2FA;strokeColor=#7E57C2;fontSize=11;fontColor=#4C3A72;align=center;verticalAlign=middle;fontFamily=Times New Roman;" vertex="1" parent="1"><mxGeometry x="560" y="590" width="240" height="26" as="geometry"/></mxCell>
+    <mxCell id="bioBottom" value="同一 16KB 数据在块层中可以被组织为一次更大的 I/O 提交，而不再严格受限于单个 4KB page" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=12;fontColor=#6B7280;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="360" y="635" width="810" height="16" as="geometry"/>
+    </mxCell>
+
+    <!-- Band 5 flash -->
+    <mxCell id="flashNote" value="FTL 继续把块层请求映射到底层闪存设备；闪存层更偏好较大、顺序的访问请求" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontColor=#4B5563;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="270" y="695" width="940" height="18" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="flashOuter" value="NAND Flash / Device" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#7F7F7F;strokeWidth=1.2;fontSize=13;fontStyle=1;fontColor=#4B5563;align=center;verticalAlign=middle;spacingTop=0;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="300" y="725" width="930" height="55" as="geometry"/>
+    </mxCell>
+
+    <!-- Neat vertical mapping arrows page->block -->
+    <mxCell id="e_p0b0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7A869A;strokeWidth=1.1;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="p0" target="b0"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e_p1b1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7A869A;strokeWidth=1.1;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="p1" target="b1"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e_p2b2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7A869A;strokeWidth=1.1;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="p2" target="b2"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e_p3b3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7A869A;strokeWidth=1.1;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="p3" target="b3"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- grouped arrows block -> bvec -->
+    <mxCell id="g0" value="4 个连续 block" style="text;html=1;strokeColor=none;fillColor=none;fontSize=11;fontColor=#7E57C2;align=center;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="560" y="500" width="240" height="16" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e_g0v0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7E57C2;strokeWidth=1.3;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="g0" target="v0"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e_b_mid" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7E57C2;strokeWidth=1.2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="fsContainer" target="midNode"><mxGeometry relative="1" as="geometry"/></mxCell>
+    <mxCell id="e_mid_v0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7E57C2;strokeWidth=1.2;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="midNode" target="v0"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- grouped arrows bio -> flash -->
+    <mxCell id="flashText" value="FTL / LBA 映射后到达底层设备" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontColor=#6B7280;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="530" y="784" width="470" height="16" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e_v0f0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#7F7F7F;strokeWidth=1.1;endArrow=blockThin;endFill=1;" edge="1" parent="1" source="v0" target="flashOuter"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+    <!-- Contradiction note -->
+    <mxCell id="contradiction" value="矛盾点：块层与设备已经倾向于按较大连续区间组织 I/O，但 page cache 和文件系统映射仍需按 4 个 4KB 对象逐次处理状态与映射。" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FCE4D6;strokeColor=#C55A11;strokeWidth=1.2;fontSize=12;fontColor=#6A3906;align=left;verticalAlign=middle;spacing=6;fontFamily=Times New Roman;" vertex="1" parent="1">
+      <mxGeometry x="1090" y="560" width="230" height="90" as="geometry"/>
+    </mxCell>
+
+  </root>
+</mxGraphModel>

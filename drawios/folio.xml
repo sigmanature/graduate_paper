@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-06-17T11:45:00.000Z" agent="5.0" version="24.5.4" etag="xyz" type="device">
+  <diagram name="Folio四层概念图" id="folio-concept-4layer">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- 最外层folio背景圆角矩形 -->
+        <mxCell id="2" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=#6c8ebf;strokeWidth=3;fillColor=#dae8fc;dashed=1;dashPattern=8 8;" vertex="1" parent="1">
+          <mxGeometry x="60" y="60" width="520" height="420" as="geometry" />
+        </mxCell>
+        
+        <!-- folio标题 -->
+        <mxCell id="3" value="folio" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Comic Sans MS;fontSize=36;fontStyle=1;fontColor=#2F5597;" vertex="1" parent="1">
+          <mxGeometry x="260" y="80" width="120" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- 第一层：pages - 多个竖直矩形 -->
+        <mxCell id="4" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#82b366;strokeWidth=2;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="120" y="140" width="40" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="5" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#82b366;strokeWidth=2;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="160" y="140" width="40" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="6" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#82b366;strokeWidth=2;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="200" y="140" width="40" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="7" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#82b366;strokeWidth=2;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="240" y="140" width="40" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="8" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#82b366;strokeWidth=2;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="280" y="140" width="40" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="9" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#82b366;strokeWidth=2;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="320" y="140" width="40" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="10" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#82b366;strokeWidth=2;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="360" y="140" width="40" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="11" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#82b366;strokeWidth=2;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="400" y="140" width="40" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="12" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#82b366;strokeWidth=2;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="440" y="140" width="40" height="160" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="13" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#82b366;strokeWidth=2;fillColor=#d5e8d4;" vertex="1" parent="1">
+          <mxGeometry x="480" y="140" width="40" height="160" as="geometry" />
+        </mxCell>
+        
+        <!-- 第二层：bits - 在pages中间 -->
+        <mxCell id="14" value="0" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#666666;fillColor=#f5f5f5;fontFamily=Comic Sans MS;fontSize=18;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="180" y="200" width="50" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="15" value="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#d79b00;fillColor=#fff2cc;fontFamily=Comic Sans MS;fontSize=18;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="230" y="200" width="50" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="16" value="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#d79b00;fillColor=#fff2cc;fontFamily=Comic Sans MS;fontSize=18;fontStyle=1;fontColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="280" y="200" width="50" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="17" value="0" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#666666;fillColor=#f5f5f5;fontFamily=Comic Sans MS;fontSize=18;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="330" y="200" width="50" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- 第三层：private -->
+        <mxCell id="18" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#b85450;strokeWidth=2;fillColor=#f8cecc;" vertex="1" parent="1">
+          <mxGeometry x="120" y="300" width="400" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- 第四层：flags - 在private下面，较短 -->
+        <mxCell id="19" value="" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#9673a6;strokeWidth=2;fillColor=#e1d5e7;" vertex="1" parent="1">
+          <mxGeometry x="120" y="360" width="300" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- pages标签和大括号 -->
+        <mxCell id="20" value="pages" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Comic Sans MS;fontSize=16;fontColor=#2F5597;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="60" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- pages大括号 -->
+        <mxCell id="21" value="" style="endArrow=none;html=1;strokeColor=#2F5597;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="150" as="sourcePoint" />
+            <mxPoint x="110" y="150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="22" value="" style="endArrow=none;html=1;strokeColor=#2F5597;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="150" as="sourcePoint" />
+            <mxPoint x="100" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="23" value="" style="endArrow=none;html=1;strokeColor=#2F5597;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="220" as="sourcePoint" />
+            <mxPoint x="110" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="24" value="" style="endArrow=none;html=1;strokeColor=#2F5597;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="290" as="sourcePoint" />
+            <mxPoint x="110" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="25" value="" style="endArrow=none;html=1;strokeColor=#2F5597;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="220" as="sourcePoint" />
+            <mxPoint x="100" y="290" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- private标签和连接线 -->
+        <mxCell id="26" value="private" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Comic Sans MS;fontSize=16;fontColor=#2F5597;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="30" y="320" width="70" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="27" value="" style="endArrow=none;html=1;strokeColor=#2F5597;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="330" as="sourcePoint" />
+            <mxPoint x="120" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- flags标签和连接线 -->
+        <mxCell id="28" value="flags" style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Comic Sans MS;fontSize=16;fontColor=#2F5597;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="375" width="60" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="29" value="" style="endArrow=none;html=1;strokeColor=#2F5597;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="100" y="385" as="sourcePoint" />
+            <mxPoint x="120" y="385" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- lock_bit标签和精确箭头 - 现在从下方引出不会重叠 -->
+        <mxCell id="30" value="lock_bit" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Comic Sans MS;fontSize=16;fontColor=#d79b00;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="440" width="80" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="31" value="" style="endArrow=classic;html=1;strokeColor=#d79b00;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="440" as="sourcePoint" />
+            <mxPoint x="255" y="240" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="460" y="420" />
+              <mxPoint x="400" y="420" />
+              <mxPoint x="320" y="380" />
+              <mxPoint x="280" y="320" />
+              <mxPoint x="255" y="280" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- writeback_bit标签和精确箭头 - 现在从下方引出不会重叠 -->
+        <mxCell id="32" value="writeback_bit" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=Comic Sans MS;fontSize=16;fontColor=#d79b00;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="460" width="120" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="33" value="" style="endArrow=classic;html=1;strokeColor=#d79b00;strokeWidth=3;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="460" y="460" as="sourcePoint" />
+            <mxPoint x="305" y="240" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="460" y="440" />
+              <mxPoint x="420" y="440" />
+              <mxPoint x="360" y="400" />
+              <mxPoint x="330" y="350" />
+              <mxPoint x="305" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,253 @@
+<mxfile host="app.diagrams.net" modified="2025-06-18T15:30:00.000Z" agent="5.0" version="24.5.4">
+  <diagram name="F2FS IOMAP Folio State" id="f2fs-folio-state">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="title" value="struct f2fs_iomap_folio_state Layout" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="600" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- IOMAP Compatible Region -->
+        <mxCell id="iomap-compatible" value="与 iomap_folio_state 兼容部分 - 可直接使用 iomap API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#0066CC;strokeWidth=3;dashed=1;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingTop=10;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="50" y="80" width="500" height="220" as="geometry" />
+        </mxCell>
+        
+        <!-- spinlock_t state_lock -->
+        <mxCell id="state_lock" value="state_lock" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE4E1;strokeColor=#8B0000;strokeWidth=2;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="120" width="440" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="state_lock_type" value="spinlock_t" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#8B0000;" vertex="1" parent="1">
+          <mxGeometry x="280" y="100" width="80" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- unsigned int read_bytes_pending -->
+        <mxCell id="read_bytes_pending" value="read_bytes_pending" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F6FF;strokeColor=#003366;strokeWidth=2;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="180" width="440" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="read_bytes_pending_type" value="unsigned int" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#003366;" vertex="1" parent="1">
+          <mxGeometry x="260" y="160" width="120" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- atomic_t write_bytes_pending -->
+        <mxCell id="write_bytes_pending" value="write_bytes_pending" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F0FFF0;strokeColor=#006400;strokeWidth=2;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="240" width="440" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="write_bytes_pending_type" value="atomic_t" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#006400;" vertex="1" parent="1">
+          <mxGeometry x="260" y="220" width="120" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- unsigned long state[] -->
+        <mxCell id="state_array_header" value="state[] - 可变长度数组" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8DC;strokeColor=#8B4513;strokeWidth=2;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="80" y="320" width="440" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="state_array_type" value="unsigned long" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#8B4513;" vertex="1" parent="1">
+          <mxGeometry x="260" y="300" width="120" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- State Array Detail Container -->
+        <mxCell id="state_detail_container" value="state[] 数组详细布局:" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FAFAFA;strokeColor=#DDDDDD;strokeWidth=2;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingTop=10;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="80" y="390" width="1240" height="500" as="geometry" />
+        </mxCell>
+        
+        <!-- IOMAP Standard Bits -->
+        <mxCell id="uptodate_bit0" value="uptodate&#xa;bits [0]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8DC;strokeColor=#8B4513;strokeWidth=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="120" y="430" width="80" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="uptodate_bit1" value="uptodate&#xa;bits [1]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8DC;strokeColor=#8B4513;strokeWidth=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="200" y="430" width="80" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dirty_bitn" value="dirty&#xa;bits [n]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8DC;strokeColor=#8B4513;strokeWidth=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="280" y="430" width="80" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Ellipsis -->
+        <mxCell id="ellipsis1" value="..." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=24;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="380" y="450" width="40" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="iomap_bitm" value="iomap&#xa;bits [m-1]" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8DC;strokeColor=#8B4513;strokeWidth=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="440" y="430" width="80" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- F2FS Extensions Label -->
+        <mxCell id="f2fs_extensions_label" value="F2FS 扩展部分:" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="120" y="520" width="200" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- F2FS Private Flags Container -->
+        <mxCell id="f2fs_flags_container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF0E6;strokeColor=#FF6600;strokeWidth=2;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="560" width="400" height="200" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="f2fs_flags_title" value="F2FS Private Flags" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;fontColor=#FF6600;" vertex="1" parent="1">
+          <mxGeometry x="270" y="570" width="140" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- Flag Bits -->
+        <mxCell id="flag_bit0" value="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#333333;strokeWidth=1;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="140" y="600" width="30" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="flag_bit1" value="0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F0F0F0;strokeColor=#333333;strokeWidth=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="170" y="600" width="30" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="flag_bit2" value="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#333333;strokeWidth=1;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="200" y="600" width="30" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="flag_bit3" value="0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F0F0F0;strokeColor=#333333;strokeWidth=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="230" y="600" width="30" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="flag_bit4" value="0" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F0F0F0;strokeColor=#333333;strokeWidth=1;fontSize=12;align=center;" vertex="1" parent="1">
+          <mxGeometry x="260" y="600" width="30" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="flag_bit5" value="1" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#333333;strokeWidth=1;fontSize=12;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="290" y="600" width="30" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Ellipsis for more bits -->
+        <mxCell id="ellipsis2" value="..." style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="330" y="605" width="30" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- NOT_POINTER Arrow and Label -->
+        <mxCell id="not_pointer_arrow" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FF6600;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="155" y="645" as="sourcePoint" />
+            <mxPoint x="155" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="not_pointer_label" value="NOT_POINTER" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#FF6600;" vertex="1" parent="1">
+          <mxGeometry x="115" y="650" width="80" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- Middle Flags Bracket -->
+        <mxCell id="bracket_left" value="{" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;fontColor=#0066CC;" vertex="1" parent="1">
+          <mxGeometry x="200" y="680" width="20" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="middle_flags" value="ONGOING_MIGRATION&#xa;INLINE_INODE&#xa;REF_RESOURCE&#xa;ATOMIC_WRITE" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="220" y="680" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="bracket_right" value="}" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;fontColor=#0066CC;" vertex="1" parent="1">
+          <mxGeometry x="340" y="680" width="20" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- MAX Arrow and Label -->
+        <mxCell id="max_arrow" value="" style="endArrow=classic;html=1;rounded=0;strokeColor=#FF6600;strokeWidth=2;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="435" y="645" as="sourcePoint" />
+            <mxPoint x="435" y="630" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <mxCell id="max_label" value="MAX" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=10;fontStyle=1;fontColor=#FF6600;" vertex="1" parent="1">
+          <mxGeometry x="410" y="650" width="50" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- dirty_bytes_pending -->
+        <mxCell id="dirty_bytes_pending" value="dirty_bytes_pending" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E6FFE6;strokeColor=#4CAF50;strokeWidth=2;fontSize=16;fontStyle=1;align=center;" vertex="1" parent="1">
+          <mxGeometry x="600" y="580" width="200" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dirty_bytes_pending_type" value="unsigned long" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=1;fontColor=#2E7D32;" vertex="1" parent="1">
+          <mxGeometry x="650" y="560" width="100" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend_container" value="字段类型说明" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8F9FA;strokeColor=#DDDDDD;strokeWidth=2;fontSize=16;fontStyle=1;align=left;verticalAlign=top;spacingTop=10;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="900" y="100" width="420" height="280" as="geometry" />
+        </mxCell>
+        
+        <!-- Legend Items -->
+        <mxCell id="legend_spinlock" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFE4E1;strokeColor=#8B0000;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="920" y="140" width="20" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_spinlock_text" value="spinlock_t - 自旋锁" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="950" y="140" width="150" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_uint" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#E0F6FF;strokeColor=#003366;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="920" y="170" width="20" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_uint_text" value="unsigned int - 无符号整数" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="950" y="170" width="180" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_atomic" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F0FFF0;strokeColor=#006400;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="920" y="200" width="20" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_atomic_text" value="atomic_t - 原子类型" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="950" y="200" width="150" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_array" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFF8DC;strokeColor=#8B4513;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="920" y="230" width="20" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_array_text" value="unsigned long[] - 可变长度数组" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="950" y="230" width="200" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_flag_set" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#FFD700;strokeColor=#333333;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="920" y="260" width="20" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_flag_set_text" value="置位标志 (值为1)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="950" y="260" width="120" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_flag_unset" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#F0F0F0;strokeColor=#333333;strokeWidth=1;" vertex="1" parent="1">
+          <mxGeometry x="920" y="290" width="20" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend_flag_unset_text" value="未置位标志 (值为0)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="950" y="290" width="140" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- Key Features -->
+        <mxCell id="features_container" value="关键特性" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8F9FA;strokeColor=#DDDDDD;strokeWidth=2;fontSize=16;fontStyle=1;align=left;verticalAlign=top;spacingTop=10;spacingLeft=15;" vertex="1" parent="1">
+          <mxGeometry x="900" y="400" width="420" height="180" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="feature1" value="• 兼容性: 前三个字段与 iomap_folio_state 完全一致" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="920" y="430" width="380" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="feature2" value="• 扩展性: state[] 数组末尾添加 F2FS 私有标志位" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="920" y="455" width="380" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="feature3" value="• 标志位: 使用 PAGE_PRIVATE_* 枚举值管理状态" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="920" y="480" width="380" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="feature4" value="• 内存布局: 通过 flexible array member 实现动态分配" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="920" y="505" width="380" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="feature5" value="• API兼容: 可直接对前三个字段使用 iomap API" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="920" y="530" width="380" height="20" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

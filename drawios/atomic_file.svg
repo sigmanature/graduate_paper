@@ -1,0 +1,31 @@
+<svg width="80" height="64" viewBox="0 0 80 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- 影子inode（虚影效果） -->
+  <rect x="44" y="12" width="20" height="40"
+        fill="#E8E8E8" stroke="#CCCCCC" stroke-width="1.5"
+        rx="2" opacity="0.5" stroke-dasharray="3,2"/>
+
+  <!-- 主inode -->
+  <rect x="16" y="8" width="20" height="40"
+        fill="#F0F8FF" stroke="#2E86DE" stroke-width="2" rx="2"/>
+
+  <!-- inode文本（调整位置避免被边框遮挡） -->
+  <text x="26" y="18" font-family="Arial, sans-serif" font-size="7"
+        text-anchor="middle" fill="#2E86DE">inode</text>
+
+  <!-- 影子inode文本 -->
+  <text x="54" y="22" font-family="Arial, sans-serif" font-size="7"
+        text-anchor="middle" fill="#999999" opacity="0.7">inode</text>
+
+  <!-- 直虚线连接 -->
+  <line x1="36" y1="28" x2="44" y2="28" stroke="#2E86DE" stroke-width="1.5"
+        stroke-dasharray="3,2" opacity="0.6"/>
+
+  <!-- 箭头指向影子inode -->
+  <path d="M44 28 L40 26 L40 30 Z" fill="#2E86DE" opacity="0.6"/>
+
+  <!-- 数据块指示 -->
+  <circle cx="26" cy="32" r="2" fill="#2E86DE" opacity="0.7"/>
+  <circle cx="26" cy="38" r="2" fill="#2E86DE" opacity="0.7"/>
+  <circle cx="54" cy="34" r="1.5" fill="#999999" opacity="0.5"/>
+  <circle cx="54" cy="38" r="1.5" fill="#999999" opacity="0.5"/>
+</svg>

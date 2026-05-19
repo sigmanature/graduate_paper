@@ -1,0 +1,69 @@
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage[UTF8]{ctex}
+\usetikzlibrary{arrows.meta,positioning,calc,fit}
+
+\begin{document}
+\begin{tikzpicture}[
+  font=\small,
+  >=Latex,
+  line width=0.85pt,
+  layer/.style={rounded corners=2pt, minimum width=11.8cm, minimum height=1.1cm, align=left, inner sep=6pt},
+  ann/.style={rounded corners=2pt, draw=gray!60, fill=gray!8, minimum width=4.4cm, minimum height=0.95cm, align=left, inner sep=5pt},
+  bubble/.style={rounded corners=2pt, draw=orange!70!black, fill=orange!10, text width=4.2cm, align=left, inner sep=5pt},
+  mapline/.style={-Latex, draw=gray!70, line width=1pt},
+  dataline/.style={-Latex, draw=blue!60!black, line width=1pt}
+]
+
+% title
+\node[draw=none, fill=none, font=\bfseries\large] (title) at (0,0) {Linux 文件访问路径的分层架构与同一数据范围的跨层表示};
+
+% layers
+\node[layer, draw=blue!55!black, fill=blue!10, below=0.8cm of title] (l1) {\textbf{用户态应用层}\quad 应用通过 \texttt{read(fd, buf, 64KB)} 发起文件访问请求。};
+\node[layer, draw=blue!55!black, fill=blue!6, below=0.45cm of l1] (l2) {\textbf{系统调用 / VFS 层}\quad 以文件字节区间组织请求：输入 \texttt{offset=0, length=64KB}，进入 \texttt{generic\_file\_read\_iter}。};
+\node[layer, draw=green!50!black, fill=green!9, below=0.45cm of l2] (l3) {\textbf{page cache 层}\quad 以页索引和缓存对象组织内存数据：\texttt{index = offset / 4096}。4KB 路径下为 16 个 page；Large Folio 路径下可为 1 个 64KB folio。};
+\node[layer, draw=red!55!black, fill=red!8, below=0.45cm of l3] (l4) {\textbf{F2FS 映射层}\quad 以逻辑块号与物理块号组织块级语义：\texttt{offset $\rightarrow$ lbn $\rightarrow$ pbn}，并结合 NAT / 节点树返回映射结果。};
+\node[layer, draw=violet!55!black, fill=violet!8, below=0.45cm of l4] (l5) {\textbf{bio / block layer 层}\quad 以设备请求组织 I/O：\texttt{pbn $\rightarrow$ bi\_sector}，多个页段可通过 \texttt{bio\_vec} / multi-page bvec 合并为一次提交。};
+\node[layer, draw=orange!60!black, fill=orange!10, below=0.45cm of l5] (l6) {\textbf{FTL 层}\quad 以逻辑块地址（LBA）到物理闪存页的映射隐藏底层复杂性，并执行 GC、wear leveling 等后台管理。};
+\node[layer, draw=brown!65!black, fill=brown!8, below=0.45cm of l6] (l7) {\textbf{NAND Flash 层}\quad 物理写入按页进行，擦除按块进行，天然更偏好顺序追加而非小块原地覆盖。};
+
+% vertical arrows
+\foreach \a/\b in {l1/l2,l2/l3,l3/l4,l4/l5,l5/l6,l6/l7} {
+  \draw[mapline] (\a.south) -- (\b.north);
+}
+
+% right annotation chain
+\node[ann, right=1.2cm of l2.east, anchor=west] (a2) {\textbf{同一段 64KB 数据在本层的表示}\\ 文件字节区间：\texttt{[0, 64KB)}};
+\node[ann, right=1.2cm of l3.east, anchor=west] (a3) {\textbf{页缓存表示}\\ 4KB 路径：\texttt{index 0..15}\\ Large Folio 路径：\texttt{folio(index=0, len=64KB)}};
+\node[ann, right=1.2cm of l4.east, anchor=west] (a4) {\textbf{文件系统表示}\\ 逻辑块号：\texttt{lbn 0..15}\\ 物理块号：\texttt{pbn = P..P+15}};
+\node[ann, right=1.2cm of l5.east, anchor=west] (a5) {\textbf{块层表示}\\ \texttt{bi\_sector = P * 8}\\ \texttt{bi\_size = 64KB}};
+\node[ann, right=1.2cm of l6.east, anchor=west] (a6) {\textbf{设备映射表示}\\ \texttt{LBA 区间 $\rightarrow$ 物理页区间}};
+
+% dashed pointers
+\draw[densely dashed, dataline] (l2.east) -- (a2.west);
+\draw[densely dashed, dataline] (l3.east) -- (a3.west);
+\draw[densely dashed, dataline] (l4.east) -- (a4.west);
+\draw[densely dashed, dataline] (l5.east) -- (a5.west);
+\draw[densely dashed, dataline] (l6.east) -- (a6.west);
+
+% left small labels for each transformation
+\node[draw=none, fill=none, font=\scriptsize, left=0.35cm of l3.west, anchor=east] {cache\\lookup};
+\node[draw=none, fill=none, font=\scriptsize, left=0.35cm of l4.west, anchor=east] {block\\mapping};
+\node[draw=none, fill=none, font=\scriptsize, left=0.35cm of l5.west, anchor=east] {bio\\submit};
+\node[draw=none, fill=none, font=\scriptsize, left=0.35cm of l6.west, anchor=east] {LBA\\mapping};
+
+% contradiction bubble
+\node[bubble, below right=0.3cm and 0.2cm of l5.east, anchor=west] (c1) {
+\textbf{第一层矛盾}\\
+块层和设备已经可以围绕较大连续区间组织 I/O，\\
+但 page cache 仍按大量 4KB 对象维护状态与映射。
+};
+\draw[densely dashed, draw=orange!70!black, line width=1pt] ($(l3.east)+(0.1,0)$) .. controls +(1.1,0) and +(-1.0,0.5) .. (c1.west);
+\draw[densely dashed, draw=orange!70!black, line width=1pt] ($(l5.east)+(0.1,0)$) .. controls +(0.9,0) and +(-1.0,-0.4) .. (c1.north west);
+
+% small legend
+\node[draw=gray!60, fill=gray!5, rounded corners=2pt, below=0.6cm of l7, text width=11.8cm, align=left, inner sep=6pt] {
+\textbf{图意：}同一段 64KB 文件数据在不同层中具有不同的抽象形式：VFS 关注字节区间，page cache 关注页索引与缓存对象，F2FS 关注逻辑块/物理块映射，bio 关注设备扇区与提交区间，FTL 关注 LBA 到物理页映射。本文的问题正出在这些“数据范围”表达方式并不天然一致。
+};
+
+\end{tikzpicture}
+\end{document}

@@ -1,0 +1,101 @@
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage[UTF8]{ctex}
+\usetikzlibrary{arrows.meta,positioning,calc,fit,backgrounds}
+
+\begin{document}
+\begin{tikzpicture}[
+  font=\small,
+  >=Latex,
+  line width=0.8pt,
+  lane/.style={rounded corners=2pt, draw=gray!55, fill=gray!4, minimum width=3.3cm, minimum height=8.8cm},
+  head/.style={rounded corners=2pt, draw=blue!55!black, fill=blue!12, minimum width=3.3cm, minimum height=0.8cm, align=center, font=\bfseries},
+  proc/.style={rounded corners=2pt, draw=gray!65, fill=white, text width=2.75cm, minimum height=0.9cm, align=left, inner sep=5pt},
+  note/.style={rounded corners=2pt, draw=orange!70!black, fill=orange!10, text width=5.1cm, align=left, inner sep=6pt},
+  edge/.style={-Latex, draw=gray!75, line width=0.9pt},
+  ret/.style={-Latex, draw=green!45!black, line width=0.9pt}
+]
+
+\node[draw=none, fill=none, font=\bfseries\large] (title) at (0,0) {一次 64KB buffered read 的完整路径（2.5 节走读图）};
+
+% lane x positions
+\def\xA{-7.6}
+\def\xB{-3.8}
+\def\xC{0.0}
+\def\xD{3.8}
+\def\xE{7.6}
+
+% swim lanes
+\node[lane, anchor=north] (la) at (\xA,-0.8) {};
+\node[lane, anchor=north] (lb) at (\xB,-0.8) {};
+\node[lane, anchor=north] (lc) at (\xC,-0.8) {};
+\node[lane, anchor=north] (ld) at (\xD,-0.8) {};
+\node[lane, anchor=north] (le) at (\xE,-0.8) {};
+
+\node[head, anchor=north] at (\xA,-0.8) {用户态};
+\node[head, anchor=north] at (\xB,-0.8) {VFS / page cache};
+\node[head, anchor=north] at (\xC,-0.8) {F2FS};
+\node[head, anchor=north] at (\xD,-0.8) {block layer / bio};
+\node[head, anchor=north] at (\xE,-0.8) {device / FTL};
+
+% y positions
+\def\yOne{-2.0}
+\def\yTwo{-3.2}
+\def\yThree{-4.5}
+\def\yFour{-5.8}
+\def\yFive{-7.1}
+\def\ySix{-8.4}
+
+% steps
+\node[proc, anchor=north] (u1) at (\xA,\yOne) {\texttt{read(fd, buf, 65536)}};
+
+\node[proc, anchor=north] (v1) at (\xB,\yOne) {\texttt{generic\_file\_read\_iter}\\输入：\texttt{offset=0, len=64KB}};
+\node[proc, anchor=north] (v2) at (\xB,\yTwo) {按 \texttt{offset/4096} 计算页索引\\在 \texttt{address\_space} 查找页缓存};
+\node[proc, anchor=north] (v3) at (\xB,\yThree) {冷读未命中\\分配 16 个 page 并加锁\\（或 1 个 64KB folio）};
+\node[proc, anchor=north] (v4) at (\xB,\yFour) {触发 \texttt{readahead}\\请求文件系统返回映射};
+\node[proc, anchor=north] (v5) at (\xB,\yFive) {bio 完成后\\设置 \texttt{PG\_uptodate} 并解锁};
+\node[proc, anchor=north] (v6) at (\xB,\ySix) {将页缓存数据拷贝回\\用户缓冲区};
+
+\node[proc, anchor=north] (f1) at (\xC,\yThree) {\texttt{f2fs\_readahead} / \texttt{f2fs\_map\_blocks}};
+\node[proc, anchor=north] (f2) at (\xC,\yFour) {\texttt{offset $\rightarrow$ lbn}\\沿节点树 / NAT 查找\\返回连续块映射 \texttt{P..P+15}};
+
+\node[proc, anchor=north] (b1) at (\xD,\yFour) {构建 bio\\\texttt{bi\_sector = P * 8}};
+\node[proc, anchor=north] (b2) at (\xD,\yFive) {\texttt{bio\_add\_page}\\合并 multi-page bvec\\\texttt{submit\_bio}};
+\node[proc, anchor=north] (b3) at (\xD,\ySix) {\texttt{bi\_end\_io} 完成回调};
+
+\node[proc, anchor=north] (d1) at (\xE,\yFive) {FTL：\texttt{LBA} 映射\\DMA 读取 64KB 数据};
+
+% horizontal flow arrows
+\draw[edge] (u1.east) -- (v1.west);
+\draw[edge] (v4.east) -- (f1.west);
+\draw[edge] (f2.east) -- (b1.west);
+\draw[edge] (b2.east) -- (d1.west);
+\draw[ret]  (d1.west) -- ++(-0.8,0) |- (b3.east);
+\draw[ret]  (b3.west) -- ++(-0.8,0) |- (v5.east);
+\draw[ret]  (v6.west) -- ++(-0.8,0) |- (u1.south);
+
+% vertical arrows within lanes
+\foreach \a/\b in {v1/v2,v2/v3,v3/v4,v4/v5,v5/v6,f1/f2,b1/b2,b2/b3} {
+  \draw[edge] (\a.south) -- (\b.north);
+}
+
+% notes
+\node[note, anchor=west] (n1) at ($(v3.east)+(1.2,0.1)$) {
+\textbf{4KB 路径成本}\\
+64KB 读请求意味着 16 次 page 级对象处理：\\
+分配、加锁、状态维护、映射查询都会按对象数放大。
+};
+\draw[densely dashed, draw=orange!75!black] (v3.east) -- (n1.west);
+
+\node[note, anchor=west] (n2) at ($(b2.east)+(1.2,-0.25)$) {
+\textbf{块层已有的大块能力}\\
+尽管上层按 16 个 4KB 对象组织，\\
+块层仍可能把它们合并为 1 次 64KB 的 bio 提交。
+};
+\draw[densely dashed, draw=orange!75!black] (b2.east) -- (n2.west);
+
+\node[note, below=0.55cm of v6, text width=14.6cm, draw=gray!60, fill=gray!6] (sum) {
+\textbf{图意：}这条路径揭示了第一章问题的核心矛盾：设备侧和 bio 侧已经具备较强的大块连续 I/O 能力，但 page cache 和文件系统映射层仍按 4KB 对象逐次处理请求。因此，即使最终提交只发生一次，上层元数据和对象管理开销仍然被 4KB 粒度放大。
+};
+
+\end{tikzpicture}
+\end{document}

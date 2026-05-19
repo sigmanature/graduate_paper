@@ -1,0 +1,99 @@
+\documentclass[tikz,border=6pt]{standalone}
+\usepackage[UTF8]{ctex}
+\usetikzlibrary{arrows.meta,positioning,fit,calc,shapes.multipart}
+
+\begin{document}
+\begin{tikzpicture}[
+  font=\small,
+  >=Latex,
+  line width=0.9pt,
+  problem/.style={rounded corners=2pt, draw=orange!70!black, fill=orange!12, minimum width=7.1cm, minimum height=1.3cm, align=left, inner sep=6pt},
+  solution/.style={rounded corners=2pt, draw=green!45!black, fill=green!10, minimum width=4.9cm, minimum height=1.1cm, align=left, inner sep=6pt},
+  bg/.style={rounded corners=2pt, draw=blue!45!black, fill=blue!8, minimum width=12.8cm, minimum height=1.0cm, align=center, inner sep=6pt},
+  goal/.style={rounded corners=2pt, draw=blue!60!black, fill=blue!12, minimum width=13.4cm, minimum height=1.2cm, align=center, inner sep=7pt},
+  note/.style={draw=none, fill=none, text width=4.3cm, align=left, font=\scriptsize},
+  link/.style={-Latex, draw=gray!70, line width=1.0pt},
+  emph/.style={-Latex, draw=orange!75!black, line width=1.1pt},
+  agg/.style={-Latex, draw=green!45!black, line width=1.0pt}
+]
+
+% background
+\node[bg] (bg) at (0, 0) {\textbf{端侧 AI / 大文件模型加载 / 连续文件访问需求增长}};
+
+% problem chain
+\node[problem, below=1.0cm of bg] (p1) {
+\textbf{问题层 1：4KB 页缓存粒度过小}\\
+页缓存对象数量过多，分配、加锁、映射查询与状态维护被拆成大量 4KB 单元，\\
+难以充分利用底层块层和闪存设备已经具备的大块连续 I/O 能力。
+};
+
+\node[problem, below=0.9cm of p1] (p2) {
+\textbf{问题层 2：Large Folio 引入后，跨层边界不再天然对齐}\\
+一个更大的 folio 会同时覆盖多个文件系统块、多个子区间和多个 bio，导致\\
+映射边界、提交边界以及 I/O 完成生命周期之间出现新的不一致。
+};
+
+\node[problem, below=0.9cm of p2] (p3) {
+\textbf{问题层 3：F2FS 私有机制与 iomap 通用框架发生兼容冲突}\\
+F2FS 的 GC/原子写/压缩等私有语义原本直接编码在页缓存对象中，\\
+而 iomap 需要同一对象承载 per-folio 状态与完成计数，因而必须进行专属扩展。
+};
+
+% solution boxes
+\node[solution, right=1.3cm of p1] (s1) {
+\textbf{第一步技术：Large Folio}\\
+扩大页缓存对象粒度\\
+4KB page $\rightarrow$ 16KB / 64KB folio
+};
+
+\node[solution, right=1.3cm of p2] (s2) {
+\textbf{第二步技术：iomap}\\
+逐块映射 $\rightarrow$ 字节区间映射\\
+统一 buffered I/O 与 writeback 的 I/O 组织方式
+};
+
+\node[solution, right=1.3cm of p3] (s3) {
+\textbf{第三步技术：F2FS 专属扩展}\\
+统一状态结构\\
+GC / compression / private 语义协同适配
+};
+
+% goal
+\node[goal, below=1.1cm of p3] (goal) {
+\textbf{本文目标：}在 F2FS 上完成 \textbf{Large Folio + iomap} 的全路径 buffered I/O 适配，\\
+使页缓存对象粒度、区间映射语义与 F2FS 私有机制在普通读写、写回、GC 与压缩文件路径中重新对齐。
+};
+
+% links
+\draw[link] (bg.south) -- (p1.north);
+\draw[emph] (p1.south) -- node[right, font=\scriptsize, text=orange!80!black] {进一步暴露} (p2.north);
+\draw[emph] (p2.south) -- node[right, font=\scriptsize, text=orange!80!black] {继续深入} (p3.north);
+
+\draw[agg] (p1.east) -- node[above, font=\scriptsize, text=green!40!black] {回应第一层问题} (s1.west);
+\draw[agg] (p2.east) -- node[above, font=\scriptsize, text=green!40!black] {回应第二层问题} (s2.west);
+\draw[agg] (p3.east) -- node[above, font=\scriptsize, text=green!40!black] {回应第三层问题} (s3.west);
+
+\draw[agg] ($(s1.south)+(0,-0.15)$) |- ($(goal.east)+(0,0.55)$);
+\draw[agg] (s2.south) |- (goal.east);
+\draw[agg] ($(s3.south)+(0,-0.15)$) |- ($(goal.east)+(0,-0.55)$);
+
+% side notes
+\node[note, left=0.5cm of p1.west, anchor=east] {
+\textbf{核心判断}\\
+先不要把全部问题都笼统称为“粒度失配”。\\
+第一层是页缓存对象过小导致的大块 I/O 利用不足。
+};
+
+\node[note, left=0.5cm of p2.west, anchor=east] {
+\textbf{关键变化}\\
+Large Folio 改变的是缓存对象边界，\\
+并不会自动改变 F2FS 块级语义与回调组织方式。
+};
+
+\node[note, left=0.5cm of p3.west, anchor=east] {
+\textbf{F2FS 特有复杂性}\\
+GC、compression、atomic write 等路径会放大兼容与生命周期问题。
+};
+
+\end{tikzpicture}
+\end{document}

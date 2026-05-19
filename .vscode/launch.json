@@ -1,0 +1,20 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        // ====================================================================
+        // ======================= 新增的Python调试配置 =======================
+        // ====================================================================
+        {
+            "name": "Python: 当前文件", // 在调试下拉菜单中显示的名字，非常直观
+            "type": "debugpy",              // 调试器类型，必须是 "python"
+            "request": "launch",           // 请求类型，"launch" 表示直接启动并调试
+            "program": "${file}",          // 核心！这会自动设置为当前编辑器中打开的文件
+            "console": "integratedTerminal", // 将程序输出显示在VS Code的集成终端中，方便交互
+            "cwd": "${fileDirname}",       // 关键！自动将工作目录设置为当前文件所在的文件夹
+            "justMyCode": true             // 调试时只进入你自己的代码，跳过标准库和第三方库，让调试更专注
+        }
+    ]
+}

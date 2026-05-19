@@ -1,0 +1,36 @@
+<svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <!-- 垃圾桶主体 -->
+  <rect x="6" y="8" width="12" height="12" rx="1"
+        fill="#666" stroke="#333" stroke-width="0.5"/>
+
+  <!-- 倾斜的盖子（掀开状态） -->
+  <path d="M 4 6 L 16 4 L 17 6 L 5 8 Z"
+        fill="#777" stroke="#444" stroke-width="0.5"/>
+
+  <!-- 盖子把手 -->
+  <ellipse cx="10" cy="5" rx="1.5" ry="1"
+           fill="#888" stroke="#555" stroke-width="0.5"/>
+
+  <!-- 顶部掉落的垃圾块 -->
+  <rect x="8" y="3" width="1.5" height="1.5" rx="0.3" fill="#e74c3c"/>
+  <rect x="11" y="2" width="1.5" height="1.5" rx="0.3" fill="#e74c3c"/>
+  <rect x="13.5" y="3.5" width="1.5" height="1.5" rx="0.3" fill="#e74c3c"/>
+
+  <!-- 垃圾桶内的垃圾块 -->
+  <rect x="8" y="11" width="2" height="2" rx="0.5" fill="#e74c3c"/>
+  <rect x="11" y="13" width="2" height="2" rx="0.5" fill="#e74c3c"/>
+  <rect x="14" y="10" width="2" height="2" rx="0.5" fill="#e74c3c"/>
+
+  <!-- 回收站循环三角箭头标志 -->
+  <g transform="translate(12, 14) scale(0.8)">
+    <!-- 第一个箭头 -->
+    <path d="M -2 -3 L 0 -1 L -1 -1 L -1 1 L -3 1 L -3 -1 L -4 -1 Z"
+          fill="#4CAF50" transform="rotate(0)"/>
+    <!-- 第二个箭头 -->
+    <path d="M -2 -3 L 0 -1 L -1 -1 L -1 1 L -3 1 L -3 -1 L -4 -1 Z"
+          fill="#4CAF50" transform="rotate(120)"/>
+    <!-- 第三个箭头 -->
+    <path d="M -2 -3 L 0 -1 L -1 -1 L -1 1 L -3 1 L -3 -1 L -4 -1 Z"
+          fill="#4CAF50" transform="rotate(240)"/>
+  </g>
+</svg>

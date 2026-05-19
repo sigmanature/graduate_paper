@@ -1,0 +1,13 @@
+<svg width="80" height="64" viewBox="0 0 80 64" xmlns="http://www.w3.org/2000/svg">
+  <!-- 后方文件夹部分 -->
+  <path d="M8 16 L8 56 C8 58 10 60 12 60 L68 60 C70 60 72 58 72 56 L72 24 C72 22 70 20 68 20 L48 20 L44 16 Z"
+        fill="#E8F4FD" stroke="#4A90E2" stroke-width="1.5"/>
+
+  <!-- 前方文件夹部分 -->
+  <path d="M4 12 L4 52 C4 54 6 56 8 56 L64 56 C66 56 68 54 68 52 L68 20 C68 18 66 16 64 16 L44 16 L40 12 Z"
+        fill="#F8FBFF" stroke="#4A90E2" stroke-width="2"/>
+
+  <!-- 文件夹标签 -->
+  <path d="M4 12 L4 16 L40 16 L44 12 Z"
+        fill="#D1E8FF" stroke="#4A90E2" stroke-width="1"/>
+</svg>

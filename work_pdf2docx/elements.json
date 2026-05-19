@@ -1,0 +1,1374 @@
+[
+  {
+    "type": "title",
+    "text": "TLB and Pagewalk Performance in Multicore Architectures with Large Die-Stacked DRAM Cache",
+    "page": 1,
+    "bbox": [
+      51.07099914550781,
+      54.36466979980469,
+      568.991943359375,
+      105.55695343017578
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "author",
+    "text": "Adarsh Patil Computer Science and Automation Indian Institute of Sciences, Bangalore, IN adarsh.patil@csa.iisc.ernet.in",
+    "page": 1,
+    "bbox": [
+      213.6199951171875,
+      147.6792755126953,
+      405.7842712402344,
+      199.1174774169922
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": false
+  },
+  {
+    "type": "affiliation",
+    "text": "being a few kilobytes. The lower bits are the offset within a page and the upper bits form the virtual page numbers which are translated into corresponding physical page number in main memory. Address Translations use in-memory tables called page tables to map virtual page numbers to physical page numbers. The page table entries also contain meta-information regarding the page including dirty bit, bits for replacement, access privilege, cacheable page etc. A cache of these entries is stored in a special CAM structure called the Translation Lookaside Buffers (TLB).",
+    "page": 1,
+    "bbox": [
+      318.9969787597656,
+      213.4875946044922,
+      571.1064453125,
+      354.8586120605469
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "abstract",
+    "text": "Abstract—In this work we study the overheads of virtual-to-physical address translation in processor architectures, like x86-64, that implement paged virtual memory using a radix tree which are walked in hardware. Translation Lookaside Buffers are critical to system performance, particularly as applications demand larger memory footprints and with the adoption of virtualization; however the cost of a TLB miss potentially results in multiple memory accesses to retrieve the translation. Architectural support for superpages has been introduced to increase TLB hits but are limited by the operating systems ability to ﬁnd contiguous memory. Numerous prior studies have proposed TLB designs to lower miss rates and reduce page walk overhead; however, these studies have modeled the behavior analytically. Further, to eschew the paging overhead for big-memory workloads and virtualization, Direct Segment maps part of a process' linear virtual address space with segment registers albeit requiring a few application and operating system modiﬁcations. The recently evolved die-stacked DRAM technology promises a high bandwidth and large last-level cache, in the order of Gigabytes, closer to the processors. With such large caches the amount of data that can be accessed without causing a TLB fault - the reach of a TLB, is inadequate. TLBs are on the critical path for data accesses and incurring an expensive page walk can hinder system performance, especially when the data being accessed is a cache hit in the LLC. Hence, we are interested in exploring novel address translation mechanisms, commensurate to the size and latency of stacked DRAM. By accurately simulating the multitude of multi-level address translation structures using the QEMU based MARSSx86 full system simulator, we perform detailed study of TLBs in conjunction with the large LLCs using multi-programmed and multi-threaded workloads.",
+    "page": 1,
+    "bbox": [
+      48.95899200439453,
+      214.1534423828125,
+      301.0628356933594,
+      621.6467895507812
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "arXiv:2002.01073v1 [cs.AR] 3 Feb 2020",
+    "page": 1,
+    "bbox": [
+      10.940000534057617,
+      216.1400146484375,
+      37.619998931884766,
+      555.0
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "In the early x86 processors, from the Intel 80386 to the Pentium, the page table had at most two levels, which meant that on a TLB miss at most two memory accesses were needed to complete the translation. However, as the physical and virtual address spaces supported by x86 processors have grown in size, the maximum depth of the tree has increased, to three levels in the Pentium Pro to accommodate a 36-bit physical address within a page table entry, and recently to four levels in the AMD Opteron to support a 48-bit virtual address space [26]. TLBs are accessed on every instruction and data reference and a TLB miss overhead can adversely impact system performance, incurring multiple memory accesses to complete the translation. Furthermore, modern applications are heavily data centric and have larger memory footprint, as evidenced in big data [25] and scale-out cloud applications [24], there is increased pressure on the TLBs to have a larger ”TLB-reach” to remain effective. Under virtualization environment, where the guests view of physical memory is different from systems view of physical memory, a second level of address translation is required to convert guest physical addresses to machine addresses which further increases the overhead of a TLB miss [18].",
+    "page": 1,
+    "bbox": [
+      318.9969787597656,
+      365.1446838378906,
+      571.1065673828125,
+      676.0507202148438
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "keywords",
+    "text": "Keywords—Translation Lookaside Buffers, Die-Stacked DRAM cache, Memory Management Unit, Performance",
+    "page": 1,
+    "bbox": [
+      48.958988189697266,
+      640.9672241210938,
+      301.0633544921875,
+      662.6270141601562
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "heading",
+    "text": "I. INTRODUCTION",
+    "page": 1,
+    "bbox": [
+      129.510986328125,
+      680.4376220703125,
+      220.51788330078125,
+      691.396484375
+    ],
+    "level": 1,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Parallely, DRAM memory speeds have not been able to keep pace commensurate to CPU speeds which has led to the well known ”Memory Wall” bottleneck [6].",
+    "page": 1,
+    "bbox": [
+      318.9969787597656,
+      686.3358764648438,
+      571.1065063476562,
+      723.3777465820312
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Memory Management Units (MMU) have historically divided the virtual address space into pages, each usually",
+    "page": 1,
+    "bbox": [
+      48.95999526977539,
+      699.3766479492188,
+      301.0695495605469,
+      723.3775024414062
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "image",
+    "text": null,
+    "page": 2,
+    "bbox": [
+      48.95899963378906,
+      54.00001525878906,
+      302.8789978027344,
+      220.08001708984375
+    ],
+    "level": null,
+    "image_path": "work_pdf2docx/images/p02_001.jpeg",
+    "translate": false
+  },
+  {
+    "type": "caption",
+    "text": "Fig. 1: Modern processor organization showing MMU caching structures and proposed Die-stacking technology",
+    "page": 2,
+    "bbox": [
+      52.82099914550781,
+      229.5648651123047,
+      297.2044372558594,
+      266.6058044433594
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "This has led to development of complex memory hierarchies with replication, to avoid off-chip accesses. Also, currently the DRAM memory chips are fabricated using the high-density NMOS process to create high-quality capacitors and low-leakage transistors while logic chips are manufactured using high-speed CMOS process to create complex multi-level metalizations for transistors. The two processes are not compatible to be interfaced on the same die and must be interfaced using off-chip interconnects that add to the latency of an access.",
+    "page": 2,
+    "bbox": [
+      48.959007263183594,
+      288.6048889160156,
+      301.0685729980469,
+      416.9349060058594
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "The advent of die-stacking technology [7] provides a way to integrate disparate silicon die with better interconnects. The implementation could be accomplished by 3D vertical stacking of DRAM chips using through-silicon vias (TSV) interconnects or horizontally/2.5D stacking on a interposer chip as depicted in Figure 1. This allows the addition of a sizable DRAM chip close to processing cores. The onchip DRAM memory can provide anywhere from a couple of hundreds of megabytes to a few gigabytes of storage at high bandwidths of 400GB/s compared to the 90GB/s of DDR4 bandwidth. This onchip memory has been advocated to be used as a large last level cache which is transparent to software. In this context, incurring expensive page walks on TLB miss, when the data being accessed is a hit in these large LLCs can hinder system performance.",
+    "page": 2,
+    "bbox": [
+      48.959007263183594,
+      424.8979797363281,
+      301.06854248046875,
+      631.4739379882812
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "This work studies and explores the following design opportunities:",
+    "page": 2,
+    "bbox": [
+      48.959007263183594,
+      639.4370727539062,
+      301.0645446777344,
+      663.4369506835938
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "• We study the problem of reach of the multitude of TLBs in the modern processors and the associated latency of page walks on a TLB miss in detail. We ﬁnd that some workloads suffer",
+    "page": 2,
+    "bbox": [
+      63.35500717163086,
+      672.9390258789062,
+      301.0689392089844,
+      723.3779296875
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "from signiﬁcant page walk overheads, incurring as much as 135 cycles on an average per dTLB miss. This overhead is high compared to 40-50 cycles for accessing die-stacked LLC or 80-100 cycles for off-chip DRAM memory access.",
+    "page": 2,
+    "bbox": [
+      353.24298095703125,
+      59.02403259277344,
+      571.1058349609375,
+      122.1479721069336
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "• We quantify the effects of caching of page walk levels in the cache hierarchy and the TLB miss overheads on a modern OoO processor architecture. We ﬁnd that for the higher levels of the page walk tree, only about 20%-30% of accesses hit in L1 or L2 cache. The lower levels are found either in L3 caches or access main memory for translation.",
+    "page": 2,
+    "bbox": [
+      333.3929748535156,
+      129.5279998779297,
+      571.1058349609375,
+      232.1310577392578
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "• We also evaluate the impact on IPC with ideal TLB / address translation in an OoO processor. The total overheads of address translation system on IPC values for some workloads is as much as 10%",
+    "page": 2,
+    "bbox": [
+      333.3929748535156,
+      239.51206970214844,
+      571.1058959960938,
+      302.9920959472656
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "• Finally, we correlate the TLB reach to the size and latency of the large last level die-stacked caches. Across a wide range of cache sizes and 2 different block sizes, we analyze the efﬁciency of TLBs to use the proposed large capacity caches efﬁciently.",
+    "page": 2,
+    "bbox": [
+      333.3929748535156,
+      310.37213134765625,
+      571.1058959960938,
+      386.8931579589844
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Overall, this work is an early study towards the design of efﬁcient MMUs and caches for future multicore designs. In particular our results are focused on understanding the TLB-reach for the large die-stacked DRAM cache to avoid needless page walk overheads when data accessed is present in caches close to the processor.",
+    "page": 2,
+    "bbox": [
+      318.9969787597656,
+      396.2992248535156,
+      571.1064453125,
+      485.5052185058594
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "The rest of the paper is organized as follows. Section II introduces the relevant aspects of page table structure in modern x86-64 architecture and describes the page table walk in native and virtualized environments. Section II also describes the die-stacked DRAM caches. Section III discusses related work. Section IV lists our simulator infrastructure and experimental methodology. Section V presents results of page walk overheads and TLB-reach problems for the die-stacked LLCs. Section VI concludes the study and lists the future work.",
+    "page": 2,
+    "bbox": [
+      318.9969787597656,
+      493.2413024902344,
+      571.1065673828125,
+      621.5712280273438
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "heading",
+    "text": "II. X86-64 PAGE WALK AND DRAM CACHES",
+    "page": 2,
+    "bbox": [
+      335.79498291015625,
+      635.9053344726562,
+      554.3077392578125,
+      646.8641967773438
+    ],
+    "level": 1,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "subheading",
+    "text": "A. Page Table Structure",
+    "page": 2,
+    "bbox": [
+      318.9969482421875,
+      654.4090576171875,
+      427.7750244140625,
+      665.3679809570312
+    ],
+    "level": 2,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "x86 processors use a radix tree to map virtual to physical address. The depth of the tree in modern processors currently stands at 4 levels to accommodate 48bit virtual addresses. A virtual address is split into page",
+    "page": 2,
+    "bbox": [
+      318.9969482421875,
+      673.2953491210938,
+      571.1063232421875,
+      723.3782348632812
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "image",
+    "text": null,
+    "page": 3,
+    "bbox": [
+      78.91999816894531,
+      53.998023986816406,
+      267.2720031738281,
+      160.9420166015625
+    ],
+    "level": null,
+    "image_path": "work_pdf2docx/images/p03_002.jpeg",
+    "translate": false
+  },
+  {
+    "type": "paragraph",
+    "text": "(a) Page table structure in x86-64",
+    "page": 3,
+    "bbox": [
+      112.71199798583984,
+      167.18295288085938,
+      237.30909729003906,
+      176.14935302734375
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "image",
+    "text": null,
+    "page": 3,
+    "bbox": [
+      88.13500213623047,
+      185.885986328125,
+      258.05499267578125,
+      273.43798828125
+    ],
+    "level": null,
+    "image_path": "work_pdf2docx/images/p03_003.png",
+    "translate": false
+  },
+  {
+    "type": "paragraph",
+    "text": "(b) 2D page walk in Virtualization",
+    "page": 3,
+    "bbox": [
+      110.96399688720703,
+      279.6789855957031,
+      239.05799865722656,
+      288.6453857421875
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "caption",
+    "text": "Fig. 2: Page table structure in x86-64",
+    "page": 3,
+    "bbox": [
+      90.38199615478516,
+      302.8858642578125,
+      259.6421813964844,
+      313.84478759765625
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "offset and page number. The virtual page number is further divided into a sequence of indices. The ﬁrst index selects an entry from the root level of the tree, pointed to by the CR3 register, which contains the pointer to the next level of the tree and so on until either the address is invalid (i.e. no valid translation is present for that address, in which case a page fault ensues) or the entry points to a data page. If the entry is found, the virtual address offset is concatenated with the physical page number to retrieve the complete physical address. In x86 systems the TLBs are hardware-managed, meaning on a miss MMUs use hardware state machine to walk the page table and locate the mapping and insert to TLB. The effect of hardware-manged TLBs is that the page table organization is largely ﬁxed but avoids expensive interrupts as in a software-managed TLB [8].",
+    "page": 3,
+    "bbox": [
+      48.9589958190918,
+      339.182861328125,
+      301.06854248046875,
+      545.7589111328125
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Figure 2(a) shows the structure of a x86 64-bit virtual address. The standard page size 4KB is used, giving the 12-bit offset. The remaining bits are divided into 9-bit offsets to index into the four levels of the page table. The four levels are PML4(Page Map Level4), PDP(Page Directory Pointer), PD(Page Directory) and PT (Page Table) . For simplicity we will refer to these levels as PL4, PL3, PL2 and PL1 levels respectively. Given this structure of the page table, the current virtual address translation requires upto four memory references to ”walk” the page table. Each entry at every level is 8 bytes (i.e. 512 PTEs ﬁt in one 4KB page). Superpages, which are virtually and physically aligned pages",
+    "page": 3,
+    "bbox": [
+      48.9589958190918,
+      555.925048828125,
+      301.06854248046875,
+      723.3779296875
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "of memory, were proposed to allocate large chunks of memory. Superpages of 2MB or 1GB can be allocated if the Operating System can ﬁnd contiguous and aligned 2MB or 1GB regions in memory which are less likely in a long running system due to memory fragmentation. Superpages allow a single entry in the TLB to cover a larger memory address space, hence increasing the TLBreach.",
+    "page": 3,
+    "bbox": [
+      318.9969787597656,
+      59.02403259277344,
+      571.1065063476562,
+      161.27101135253906
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "caption",
+    "text": "Figure 1 shows the architectural support for translation caching in modern processors which consists of multiple hierarchical levels of translation caching structures. Typically there are 64-entry, 4-way associative split L1 Data and Instruction TLB and a shared 8-way associative L2 TLB of 1024 entries for 4KB pages. Superpage TLBs contain a handful of entries for 2MB pages and 1GB pages which are looked up in parallel with L1 TLBs for a match. If these translation structures encounter a miss, accessing each page table level on every page walk will incur a penalty of several tens of cycles, even if all translations are present in the L2 data cache. To exploit the signiﬁcant locality in the upper level entries, vendors have introduced low latency structures to store these upper level page table entries allowing the walk to skip a few levels. AMD’s Page Walk Cache (PWC) and Intel’s Paging-Structure Caches are examples of translation caches [11].",
+    "page": 3,
+    "bbox": [
+      318.9969787597656,
+      170.04112243652344,
+      571.1065063476562,
+      402.7002258300781
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "subheading",
+    "text": "B. Page Walk in Virtualization",
+    "page": 3,
+    "bbox": [
+      318.9969787597656,
+      421.31005859375,
+      457.39697265625,
+      432.2689514160156
+    ],
+    "level": 2,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "With virtualization, page walks could incur upto 24 memory references to complete a walk. This is due to the use of separate guest page tables (gPT) to translate guest virtual to guest physical addresses and nested page tables (nPT) to translate guest physical addresses to system physical addresses. Guest and nested page tables are set up and modiﬁed independently by the guest and hypervisor respectively and they have their own CR0, CR3, CR4, EFER and PAT state registers. When a guest attempts to reference memory using a virtual address and nested paging is enabled, the page walker performs a 2dimensional walk using the gPT and nPT to translate the guest virtual address to system physical address as shown in Figure 2(b). When the page walk is completed, an entry containing the end to end translation is inserted into the TLB.",
+    "page": 3,
+    "bbox": [
+      318.9969787597656,
+      441.2303161621094,
+      571.1065063476562,
+      647.8072509765625
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "subheading",
+    "text": "C. Large Last Level Die-Stacked DRAM Cache",
+    "page": 3,
+    "bbox": [
+      318.9969787597656,
+      666.4171142578125,
+      533.1337280273438,
+      677.3760375976562
+    ],
+    "level": 2,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "The inclusion of large last level DRAM cache reduces off-chip memory access time. These DRAMs operate in the same model as off-chip DRAMs and are subject",
+    "page": 3,
+    "bbox": [
+      318.9969787597656,
+      686.33740234375,
+      571.1065063476562,
+      723.3782348632812
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "TABLE I: Cache access and TLB lookup",
+    "page": 4,
+    "bbox": [
+      81.83999633789062,
+      64.81889343261719,
+      268.1851806640625,
+      75.77779388427734
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Cache access",
+    "page": 4,
+    "bbox": [
+      54.93699645996094,
+      85.9506607055664,
+      70.20378112792969,
+      98.7482681274414
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "TLB lookup Effect Inference",
+    "page": 4,
+    "bbox": [
+      82.15899658203125,
+      85.9506607055664,
+      242.42843627929688,
+      98.7482681274414
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "HIT HIT data retrieved without additional delay working set ﬁts in cache and TLB reach sufﬁcient",
+    "page": 4,
+    "bbox": [
+      54.9370002746582,
+      99.98966217041016,
+      281.103515625,
+      112.78726959228516
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "MISS HIT off-chip access for data, no overhead in translation",
+    "page": 4,
+    "bbox": [
+      54.9370002746582,
+      114.0286636352539,
+      174.59066772460938,
+      126.8272476196289
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "TLB reach is sufﬁcient, but exhibits poor cache locality",
+    "page": 4,
+    "bbox": [
+      219.86300659179688,
+      114.0286636352539,
+      297.087646484375,
+      126.8272476196289
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "HIT MISS multiple memory access for translation, but requested data resides in cache",
+    "page": 4,
+    "bbox": [
+      54.9370002746582,
+      128.0686492919922,
+      207.90980529785156,
+      140.8662567138672
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "TLB reach insufﬁcient for cache translation dominates access time",
+    "page": 4,
+    "bbox": [
+      219.86300659179688,
+      128.0686492919922,
+      301.8457946777344,
+      140.8662567138672
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "MISS MISS multiple memory access to retrieve both translation & data",
+    "page": 4,
+    "bbox": [
+      54.9370002746582,
+      142.10765075683594,
+      194.32272338867188,
+      154.90525817871094
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "possibly ﬁrst access to the page / no recent accesses / page fault",
+    "page": 4,
+    "bbox": [
+      219.86300659179688,
+      142.10765075683594,
+      301.81591796875,
+      154.90525817871094
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "to the timing restrictions in terms of tCL, tRCD, tRP and tRAS. The use of this capacity as cache at ﬁne granularities incurs prohibitively high meta-data storage overhead. Prior research has worked towards reducing the tag storage overhead by co-locating tags and data (TAD) in the same row buffer and reducing cache hit latency by using a hit predictor [1]. Using these large caches could lead to a combination of TLBs hit/miss along with cache hit/miss. The inferences for the resulting combinations, in increasing order of latency, are listed in Table I.",
+    "page": 4,
+    "bbox": [
+      48.95899963378906,
+      175.2718963623047,
+      301.06854248046875,
+      303.6018981933594
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "heading",
+    "text": "III. RELATED WORK",
+    "page": 4,
+    "bbox": [
+      122.93000793457031,
+      321.31298828125,
+      227.09571838378906,
+      332.27191162109375
+    ],
+    "level": 1,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Many prior studies have pointed out the importance of TLB-reach and the necessity of speeding up miss handling methods. Prior work has proposed exploiting spatial locality by coalescing [9] and clustering [10] a group of spatially contiguous TLB entries into a single entry in the TLB. On look-up, the offset between the base virtual address stored in the tag is used to calculate the offset from the base physical page. More recently there have been efforts to make the TLB structures more superpage friendly without unfairly biasing applications which use small pages. This has been achieved in [16] using a combination of skewed TLB [17] and page size prediction on lookup. Abhishek Bhattacharjee et al. [15] propose last level shared TLB structures rather than the norm of per core private TLBs.",
+    "page": 4,
+    "bbox": [
+      48.95901107788086,
+      340.80999755859375,
+      301.0685729980469,
+      534.3450317382812
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Direct segment [12] analyses the memory characteristics of big-memory workloads like database, memcached, graph500 etc. and observe that these workloads do not require ﬁne grained protection or swapping as they are memory aware, long running and pay substantial cost for page walks. They propose primary region abstraction for these workloads which allows programs to specify a portion of their memory which does not beneﬁt from paging and maps this region as a segment with base and offset register to completely eliminate paging overhead. Furthermore, in [13] Jayneel Gandhi et. al propose allocation in OS in units of ’ranges’ which are mapped using segment registers. Their scheme is backward compatible with traditional paging using a range TLB at L2 level",
+    "page": 4,
+    "bbox": [
+      48.95901107788086,
+      542.8831787109375,
+      301.0685729980469,
+      723.3780517578125
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "which is looked up in parallel on a L1 TLB miss.",
+    "page": 4,
+    "bbox": [
+      318.99700927734375,
+      59.02415466308594,
+      545.0571899414062,
+      69.9830551147461
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Virtualization has seen the widespread adoption in the cloud space, however, it comes with overheads in I/O and memory accesses due to expensive page walks using nested page tables. To reduce these overheads AMD [18]proposed accelerating 2D page walks using nested page walk caches which cache frequently used levels of the page walk in hardware, greatly reducing the overheads of TLB miss. Based on direct segment [14] seeks to futher reduce memory overheads of virtualization.",
+    "page": 4,
+    "bbox": [
+      318.99700927734375,
+      77.71214294433594,
+      571.1065063476562,
+      193.00013732910156
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "There have been efforts to characterize the behaviors and sensitivity of individual applications in the SPEC 2000 and PARSEC benchmarks in [23] and [22] respectively. For SPEC 2000 the effects of TLB associtivity, prefetching and super-paging was studied for each workload ignoring the OS involvement. For PARSEC workloads they explored the effect of sharing TLB structures with the idea that cores may fetch entries that maybe useful to other cores in the near future due to multithreaded nature of the programs.",
+    "page": 4,
+    "bbox": [
+      318.99700927734375,
+      200.72923278808594,
+      571.1065063476562,
+      329.0592346191406
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "The other area of active research has been die-stacked DRAM organization. There have been signiﬁcant efforts to reduce meta data overhead from various researchers world over. Most notably Loh-Hill cache [4] and direct mapped Alloy cache [1] organization use the TAD structure. More notably close to our work are TagTables [5] and Tagless DRAM [3] cache that piggyback on the TLB translation mechanism to detect presence of the block in cache. Tagtables achieves this by ﬂipping the page table organization, which as observed earlier is difﬁcult to implement due to hardware managed TLBs. Tagless DRAM is more a practical solution which translates virtual address to a die-stacked cache address and moves the translation to physical address off critical path.",
+    "page": 4,
+    "bbox": [
+      318.99700927734375,
+      336.7882995605469,
+      571.1065673828125,
+      517.2823486328125
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "heading",
+    "text": "IV. EXPERIMENTAL SETUP",
+    "page": 4,
+    "bbox": [
+      378.73199462890625,
+      531.5905151367188,
+      511.37762451171875,
+      542.5493774414062
+    ],
+    "level": 1,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "subheading",
+    "text": "A. Simulator Platform",
+    "page": 4,
+    "bbox": [
+      318.99700927734375,
+      550.0872192382812,
+      420.3778076171875,
+      561.046142578125
+    ],
+    "level": 2,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "We use the QEMU based x86-64 cycle accurate full system simulator MARSSx86 [19] for this study. We modify the simulators MMU to incorporate the various appropriately sized multi-level TLB structures. We add a shared L2 TLB, a dedicated superpage TLB for 2MB pages. We also modify the page walk handler to accurately model the reduced number of page walk levels for superpages. We boot unmodiﬁed Linux kernel 2.6.38 which supports Transparent Huge Pages (THP). We also include a L4 cache in the memory hierarchy and systematically account for timing characteristics in the simulator. This gives us the lower bound on the",
+    "page": 4,
+    "bbox": [
+      318.99700927734375,
+      568.9664916992188,
+      571.1066284179688,
+      723.3783569335938
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "TABLE II: Experimental Setup",
+    "page": 5,
+    "bbox": [
+      104.93599700927734,
+      64.81889343261719,
+      245.08934020996094,
+      75.77779388427734
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Parameter Value",
+    "page": 5,
+    "bbox": [
+      48.95899963378906,
+      89.81278228759766,
+      149.57354736328125,
+      97.78288269042969
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Processor 3.9GHz, 4-core, 5way OoO, x86-64 ISA L1 i-cache 32KB private, 4-way SA, 64B blocks, 2 cycles L2 d-cache 32KB private, 8-way SA, 64B blocks, 4 cycles L2 cache 256KB private, 8-way SA, 64B blocks, 6 cycles L3 cache 4MB shared, 12-way SA, 64B blocks, 9 cycles",
+    "page": 5,
+    "bbox": [
+      48.95899963378906,
+      104.38054656982422,
+      288.5481262207031,
+      147.42657470703125
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "L1 iTLB 4KB pages 64 entries, fully associative L1 dTLB 4KB pages 64 entries, fully associative L2 TLB 4KB page 1024 entries, uniﬁed fully associative Superpage TLB 32 entries, 2MB fully associative (as applicable)",
+    "page": 5,
+    "bbox": [
+      48.95899963378906,
+      153.9515380859375,
+      252.57107543945312,
+      196.51719665527344
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Main Memory 4GB DDR2, 50ns",
+    "page": 5,
+    "bbox": [
+      48.95899963378906,
+      203.5235595703125,
+      188.8740692138672,
+      211.49365234375
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "TABLE III: Workloads",
+    "page": 5,
+    "bbox": [
+      123.4280014038086,
+      227.4429168701172,
+      226.5950469970703,
+      238.4018096923828
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "mix1 milc mcf omnetpp gcc mix2 GemsFDTD leslie3d dealII soplex mix3 cactusADM libquantum tonto shinpx3 mix4 lbm bwaves zuesmp sjeng mix5 milc GemsFDTD cactusADM lbm mix6 mcf omnetpp soplex leslie3d mix7 bwaves astar zeusmp gcc mix8 gobmk bzip2 h264ref hmmer PARSEC 4-threads canneal, dedup, ferret, ﬂuidanimate, freqmine, raytrace",
+    "page": 5,
+    "bbox": [
+      62.18000030517578,
+      248.8265380859375,
+      285.055419921875,
+      336.1166687011719
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "overheads. However, we leave the analysis of superpage TLBs as future work. Hence for this work, TLB insertions are done at 4KB page sizes. We chose full system simulation to be able to observe impact of TLB shootdowns due to context switches and inﬂuences of OS on TLB behavior, which has been shown to have considerable inﬂuence in the past literature [8].",
+    "page": 5,
+    "bbox": [
+      48.95899963378906,
+      353.15386962890625,
+      301.06854248046875,
+      442.3598327636719
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "subheading",
+    "text": "B. Methodology",
+    "page": 5,
+    "bbox": [
+      48.95899963378906,
+      458.31964111328125,
+      122.02198791503906,
+      469.2785339355469
+    ],
+    "level": 2,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "In order to study the overheads of address translation we run a comprehensive set of multi-programmed and multi-threaded workloads. We selected memory-intensive benchmarks from the SPEC2006 suite [21] and those with large and unbounded working sets in PARSEC suite [20]. The SPECCPU 2006 were compiled with ’base’ tuning and run with ’ref’ input data sets. Our workloads mix consists of four multi-programmed benchmarks, listed in Table III, prudently combined to create a representative mix of high, average and low memory activity. The workloads mixes were run for 4 Billion cycles in detailed simulation mode after fast forwarding the ﬁrst 8 Billion instructions over the entire workload. In each case the total instructions executed for each conﬁguration was more than 8 Billion instructions. In case of PARSEC applications we simulate the entire region of interest (ROI) of the application with 4 threads. The PARSEC applications were executed with the ’simlarge’ input data set. Our baseline architecture parameters used for the",
+    "page": 5,
+    "bbox": [
+      48.95899963378906,
+      477.6769104003906,
+      301.06854248046875,
+      723.3778076171875
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "image",
+    "text": null,
+    "page": 5,
+    "bbox": [
+      321.89300537109375,
+      58.980018615722656,
+      439.85418701171875,
+      143.7960205078125
+    ],
+    "level": null,
+    "image_path": "work_pdf2docx/images/p05_004.png",
+    "translate": false
+  },
+  {
+    "type": "image",
+    "text": null,
+    "page": 5,
+    "bbox": [
+      447.5250244140625,
+      58.980018615722656,
+      564.3702392578125,
+      143.7960205078125
+    ],
+    "level": null,
+    "image_path": "work_pdf2docx/images/p05_005.png",
+    "translate": false
+  },
+  {
+    "type": "image",
+    "text": null,
+    "page": 5,
+    "bbox": [
+      380.5810241699219,
+      153.75901794433594,
+      505.6810302734375,
+      250.95901489257812
+    ],
+    "level": null,
+    "image_path": "work_pdf2docx/images/p05_006.png",
+    "translate": false
+  },
+  {
+    "type": "caption",
+    "text": "Fig. 3: Page Walk latency distribution for SPEC 2006 & PARSEC workloads. The dashed bar shows the average latency",
+    "page": 5,
+    "bbox": [
+      323.4170227050781,
+      265.4248962402344,
+      566.6825561523438,
+      302.4668273925781
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "simulation are listed in Table II, modeling the recent Intel Ivy Bridge processor. For die-stacked DRAM cache we simulate a ﬂat cache with 16 way associative, 20 cycle latency writeback cache. L1 and L2 cache have 256 entry MSHR, while L3 and L4 have 128 entries each.",
+    "page": 5,
+    "bbox": [
+      318.99700927734375,
+      323.4779052734375,
+      571.1065673828125,
+      386.6018371582031
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "heading",
+    "text": "V. RESULTS",
+    "page": 5,
+    "bbox": [
+      413.45501708984375,
+      401.0799255371094,
+      476.6476135253906,
+      412.0388488769531
+    ],
+    "level": 1,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "subheading",
+    "text": "A. Page Walk latency analysis",
+    "page": 5,
+    "bbox": [
+      318.99700927734375,
+      419.62567138671875,
+      456.35589599609375,
+      430.5845642089844
+    ],
+    "level": 2,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "We limit our analysis to only data references (dTLB) in this work since data references are much less wellbehaved than instructions in terms of misses. We ﬁnd the iTLB hit rate to be greater than 99 % for most workloads. We studied the latency distribution incurred for a page walk to understand the average number of cycles taken to retrieve a translation on a TLB miss. Figure 3 plots latencies experienced by page walk vs the fraction of walks that experience this latency. The plot shows that the workloads exhibit wide range of page walk latencies ranging from 20 cycles for mix8 and freqmine (not plotted) to 150 cycles for mix4 and ﬂuidanimate. However, average page walk latencies are aggregate numbers for the entire page walk duration and are not adequate to conclude behavior of walks. TLB hit rates for most of the workloads were measured to be in the 90% to 95% range which makes page walks few and far spaced temporally. To better understand the page walk behavior we examined the locality characteristics of each page walk level. To determine this we collected cache hit distribution of these page walk levels over the cache hierarchy of a multi-core architecture. Figure 4 shows the",
+    "page": 5,
+    "bbox": [
+      318.99700927734375,
+      438.5539245605469,
+      571.1066284179688,
+      723.3778686523438
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "image",
+    "text": null,
+    "page": 6,
+    "bbox": [
+      49.29100036621094,
+      58.979591369628906,
+      169.26100158691406,
+      147.67999267578125
+    ],
+    "level": null,
+    "image_path": "work_pdf2docx/images/p06_007.png",
+    "translate": false
+  },
+  {
+    "type": "image",
+    "text": null,
+    "page": 6,
+    "bbox": [
+      176.92999267578125,
+      58.979591369628906,
+      296.8999938964844,
+      147.67999267578125
+    ],
+    "level": null,
+    "image_path": "work_pdf2docx/images/p06_008.png",
+    "translate": false
+  },
+  {
+    "type": "paragraph",
+    "text": "(a) SPEC2006-mix1 to mix8 left to right",
+    "page": 6,
+    "bbox": [
+      60.150001525878906,
+      156.1876678466797,
+      162.2354736328125,
+      162.16526794433594
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "(b) PARSEC-canneal, dedup, ferret, ﬂuidanimate",
+    "page": 6,
+    "bbox": [
+      176.92999267578125,
+      156.1876678466797,
+      300.7320861816406,
+      162.16526794433594
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "freqmine, raytrace - left to right",
+    "page": 6,
+    "bbox": [
+      176.92999267578125,
+      166.41868591308594,
+      255.61314392089844,
+      172.3962860107422
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "caption",
+    "text": "Fig. 4: Locality for each level of the page walk",
+    "page": 6,
+    "bbox": [
+      67.48399353027344,
+      186.71189880371094,
+      282.5414123535156,
+      197.67079162597656
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "distribution of page walk hits for each workload. Clearly PL1 has highest memory access percentages amongst all workloads due to low locality. PL2 has a uniform hit percentage in almost all cache levels and we observe that most of the 8 translations in a cache line are used. For SPEC workloads PL3 level sees around 50 % of the accesses are to either L3 or main memory. On the contrary for PL3, PARSEC sees very high L1 locality due to the fact that most PARSEC workloads have footprints of less than 1GB. Due to the cache pollution resulting from page walks AMDs MMU designs have made a design decision to walk page tables in L2 caches rather than L1 caches [18] which may exacerbate the walk latencies.",
+    "page": 6,
+    "bbox": [
+      48.95899200439453,
+      218.9128875732422,
+      301.0685729980469,
+      399.4069519042969
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "Modern OoO processors are very efﬁcient at hiding latency of memory accesses with reorder buffers and load-store queues. Due to this masking, the latency incurred for page walks may not manifest as an overall IPC impact. To accurately understand the TLB miss impact on IPC we delve deeper and compare IPC against a simulated ideal TLB. We simulate an ideal TLB as (a) zero page walk overhead, (b) no cache pollution, (c) returns the translation in a single cycle. We compare the resulting IPC values to determine the precise page walk overheads. Figure 5 shows the IPC values normalized to the baseline performance. We observe that in some workloads, speciﬁcally mix1 and mix6 IPC increases by 6.05% and 4.26% respectively and for canneal and ferret the increase is 11.75 % and 12.01% compared to baseline. This shows that with larger memory footprint a reasonable IPC improvement is possible with improved address translation schemes.",
+    "page": 6,
+    "bbox": [
+      48.95899200439453,
+      407.22802734375,
+      301.06854248046875,
+      639.8880004882812
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "subheading",
+    "text": "B. TLB reach in Die-Stacked DRAM Caches",
+    "page": 6,
+    "bbox": [
+      48.95899200439453,
+      654.3237915039062,
+      251.0301513671875,
+      665.28271484375
+    ],
+    "level": 2,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "To understand how often each of cases of cache and TLB hit-miss interplay occur in various workloads, we performed a detailed study for various cache capacities. We perform experiments for two different block sizes -",
+    "page": 6,
+    "bbox": [
+      48.95899200439453,
+      673.2951049804688,
+      301.0684509277344,
+      723.3779907226562
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "image",
+    "text": null,
+    "page": 6,
+    "bbox": [
+      446.8810119628906,
+      58.97999572753906,
+      559.0059814453125,
+      123.4949951171875
+    ],
+    "level": null,
+    "image_path": "work_pdf2docx/images/p06_009.png",
+    "translate": false
+  },
+  {
+    "type": "image",
+    "text": null,
+    "page": 6,
+    "bbox": [
+      327.2590026855469,
+      60.01499557495117,
+      439.21148681640625,
+      123.4949951171875
+    ],
+    "level": null,
+    "image_path": "work_pdf2docx/images/p06_010.png",
+    "translate": false
+  },
+  {
+    "type": "caption",
+    "text": "Fig. 5: IPCs normalized to baseline",
+    "page": 6,
+    "bbox": [
+      364.989013671875,
+      137.9608612060547,
+      525.1094360351562,
+      148.9197540283203
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "64B and 512B. Currently, we have been able to simulate 4 SPEC and 4 PARSEC workloads for the purposes of presentation in this paper. The rest of the conﬁgurations and workload permutations are currently being run and we expect to have results in the near future. Figure 6 plots the number of cases which result in L4 Hit-TLB miss per thousand L4 Hits for various cache sizes at 64B line size. We observe that as cache size increases this parameter almost ﬂatlines out. For an L4 cache size tailored dynamic TLB reach, we should theoretically see a robust decrease in this parameter as shown by the L4 dovetail TLB line. To complement the increase in L4 hit rate, a dynamic TLB would also need to correspondingly increase hits for the L4 cache to be effective. In other words for an oracle TLB this parameter would be 0.",
+    "page": 6,
+    "bbox": [
+      318.99700927734375,
+      169.0068817138672,
+      571.1066284179688,
+      362.5419616699219
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "image",
+    "text": null,
+    "page": 6,
+    "bbox": [
+      321.29901123046875,
+      374.3854675292969,
+      568.7990112304688,
+      527.4229736328125
+    ],
+    "level": null,
+    "image_path": "work_pdf2docx/images/p06_011.png",
+    "translate": false
+  },
+  {
+    "type": "caption",
+    "text": "Fig. 6: L4Hit - TLBMiss per 1K L4 Hits - 64B line size",
+    "page": 6,
+    "bbox": [
+      318.99700927734375,
+      536.9078979492188,
+      571.1063842773438,
+      547.8667602539062
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "heading",
+    "text": "VI. FUTURE WORK AND CONCLUSION",
+    "page": 6,
+    "bbox": [
+      351.02301025390625,
+      563.44189453125,
+      539.0844116210938,
+      574.4007568359375
+    ],
+    "level": 1,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "paragraph",
+    "text": "This is the ﬁrst work that examines the TLB-reach and page walk overheads in the context of large last level die-stacked DRAM caches. We characterize the page walk latency and quantify effect on IPC. We layout the goals of an L4 dovetail TLB which adjusts reach as size of L4 cache increases to maximize efﬁciency of large die-stacked caches. Going forward we would like to examine the impact of superpage allocation, using dedicated superpage TLBs and vary TLB associativity. We also would like to simulate modern big data and cloud benchmarks with accurate latencies of DRAMs.",
+    "page": 6,
+    "bbox": [
+      318.99700927734375,
+      582.0068969726562,
+      571.1065673828125,
+      723.3777465820312
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": true
+  },
+  {
+    "type": "heading",
+    "text": "REFERENCES",
+    "page": 7,
+    "bbox": [
+      144.32699584960938,
+      59.02391052246094,
+      205.70819091796875,
+      69.9828109741211
+    ],
+    "level": 1,
+    "image_path": null,
+    "translate": false
+  },
+  {
+    "type": "reference",
+    "text": "Dimensionality of Nested Page Walks. In Proceedings of the 47th Annual IEEE/ACM International Symposium on Microarchitecture (MICRO-47) [15] Abhishek Bhattacharjee, Lustig D, Martonosi M. 2011. Shared Last-Level TLBs for Chip Multiprocessors. In Proceedings of 17th IEEE International Symposium on High Performance Computer Architecture (HPCA ’11) [16] Misel-Myrto Papadopoulou, Xin Tong, Andre Seznec, and Andreas Moshovos. 2014. Prediction-based superpage-friendly TLB designs. In Proceedings of 21st IEEE International Symposium on High Performance Computer Architecture (HPCA ’15) [17] A. Seznec. 2004. Concurrent Support of Multiple Page Sizes on a Skewed Associative TLB. IEEE Trans. Comput. 53, 7 (July 2004) [18] Ravi Bhargava, Benjamin Serebrin, Francesco Spadini, and Srilatha Manne. 2008. Accelerating two-dimensional page walks for virtualized systems. In Proceedings of the 13th international conference on Architectural support for programming languages and operating systems (ASPLOS XIII) [19] Avadh Patel, Furat Afram, Shunfei Chen, Kanad Ghose. 2011. MARSSx86: A Full System Simulator for x86 CPUs. In Proceedings of the 48th Design Automation Conference (DAC ’11). [20] Christian Bienia. 2011. Benchmarking Modern Multiprocessors. Ph.D. Dissertation. Princeton University, Princeton, NJ, USA. Advisor(s) Kai Li. AAI3445564. [21] SPEC CPU2006: http://www.spec.org/cpu2006/Docs/readme1st.html [22] Abhishek Bhattacharjee, Martonosi M.2009. Characterizing the TLB Behavior of Emerging Parallel Workloads on Chip Multiprocessors. 18th International Conference on Parallel Architectures and Compilation Techniques (PACT ’09). [23] Gokul B. Kandiraju and Anand Sivasubramaniam. 2002. Characterizing the d-TLB behavior of SPEC CPU2000 benchmarks. In Proceedings of the 2002 ACM SIGMETRICS international conference on Measurement and modeling of computer systems (SIGMETRICS ’02) [24] Michael Ferdman, Almutaz Adileh, Onur Kocberber, Stavros Volos, Mohammad Alisafaee, Djordje Jevdjic, Cansu Kaynak, Adrian Daniel Popescu, Anastasia Ailamaki, and Babak Falsaﬁ. 2012. Clearing the Clouds: A Study of Emerging Scale-out Workloads on Modern Hardware. In the 17th International Conference on Architectural Support for Programming Languages and Operating Systems (ASPLOS ’12) [25] Lei Wang, Jianfeng Zhan, Chunjie Luo, Yuqing Zhu, Qiang Yang, Yongqiang He, WanlingGao, Zhen Jia, Yingjie Shi, Shujie Zhang, Cheng Zhen, Gang Lu, Kent Zhan, Xiaona Li, and Bizhu Qiu. 2014. BigDataBench: a Big Data Benchmark Suite from Internet Services. The 20th IEEE International Symposium On High Performance Computer Architecture (HPCA ’14) [26] AMD64 Architecture Programmers Manual Volume 2: System Programming, http://support.amd.com/TechDocs/24593.pdf",
+    "page": 7,
+    "bbox": [
+      318.9969787597656,
+      60.53396224975586,
+      591.1184692382812,
+      610.9183959960938
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": false
+  },
+  {
+    "type": "reference",
+    "text": "[1] Moinuddin K. Qureshi and Gabe H. Loh. 2012. Fundamental Latency Trade-off in Architecting DRAM Caches: Outperforming Impractical SRAM-Tags with a Simple and Practical Design. In Proceedings of the 2012 45th Annual IEEE/ACM International Symposium on Microarchitecture (MICRO-45) [2] Nagendra Gulur, Mehendale M, Manikantan R, Govindarajan R. 2014. Bi-Modal DRAM Cache: Improving Hit Rate, Hit Latency and Bandwidth. In Proceedings of the 2014 47th Annual IEEE/ACM International Symposium on Microarchitecture (MICRO-47) [3] Yongjun Lee, Jongwon Kim, Hakbeom Jang, Hyunggyun Yang, Jangwoo Kim, Jinkyu Jeong, and Jae W. Lee. 2015. A fully associative, tagless DRAM cache. In Proceedings of the 42nd Annual International Symposium on Computer Architecture (ISCA ’15) [4] Gabriel H. Loh and Mark D. Hill. 2011. Efﬁciently enabling conventional block sizes for very large die-stacked DRAM caches. In Proceedings of the 44th Annual IEEE/ACM International Symposium on Microarchitecture (MICRO-44) [5] Franey S, Lipasti M. 2015. Tag tables. In Proceedings of 21th IEEE International Symposium on High Performance Computer Architecture (HPCA ’15) [6] Wm. A. Wulf and Sally A. McKee. 1995. Hitting the memory wall: implications of the obvious. SIGARCH Comput. Archit. News 23, 1 (March 1995), [7] B. Black, M. Annavaram, N. Brekelbaum, J. DeVale, L. Jiang, G. H. Loh, D. McCaule, P. Morrow, D. W. Nelson, D. Pantuso, P. Reed, J. Rupley, S. Shankar, J. Shen, and C. Webb, Die stacking (3D) microarchitecture, in Proceedings of the 39th Annual IEEE/ACM International Symposium on Microarchitecture, 2006, pp. 469479. [8] D. Nagle, R. Uhlig, T. Stanley, S. Sechrest, T. Mudge, and R. Brown. Design Tradeoffs for Software Managed TLBs. In Proceedings of the 20th Annual International Symposium on Computer Architecture, pages 2738, 1993 [9] Binh Pham, Viswanathan Vaidyanathan, Aamer Jaleel, and Abhishek Bhattacharjee. 2012. CoLT: Coalesced Large-Reach TLBs. In Proceedings of the 2012 45th Annual IEEE/ACM International Symposium on Microarchitecture (MICRO-45) [10] Binh Pham, Abhishek Bhattacharjee, Yasuko Eckert, and Gabriel Loh. 2014. Increasing TLB Reach by Exploiting Clustering in Page Translations. In Proceedings of 20th IEEE International Symposium on High Performance Computer Architecture (HPCA ’14) [11] Thomas W. Barr, Alan L. Cox, and Scott Rixner. 2010. Translation caching: skip, don’t walk (the page table). In Proceedings of the 37th annual international symposium on Computer architecture (ISCA ’10) [12] Arkaprava Basu, Jayneel Gandhi, Jichuan Chang, Mark D. Hill, and Michael M. Swift. 2013. Efﬁcient virtual memory for big memory servers. In Proceedings of the 40th Annual International Symposium on Computer Architecture (ISCA ’13). [13] Vasileios Karakostas, Jayneel Gandhi, Furkan Ayar, Adrin Cristal, Mark D. Hill, Kathryn S. McKinley, Mario Nemirovsky, Michael M. Swift, and Osman nsal. 2015. Redundant memory mappings for fast access to large memories. In Proceedings of the 42nd Annual International Symposium on Computer Architecture (ISCA ’15). [14] Jayneel Gandhi, Arkaprava Basu, Mark D. Hill, and Michael M. Swift. 2014. Efﬁcient Memory Virtualization: Reducing",
+    "page": 7,
+    "bbox": [
+      48.9589958190918,
+      77.02603149414062,
+      301.068115234375,
+      722.8953857421875
+    ],
+    "level": null,
+    "image_path": null,
+    "translate": false
+  }
+]
