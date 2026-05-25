@@ -1,41 +1,37 @@
-@algorithm id=f2fs_set_iomap chapter=4 index=1 title="f2fs_set_iomap：块映射到 iomap 区间转换"
+@algorithm id=f2fs_set_iomap chapter=4 index=1 title="f2fs_set_iomap: block map to iomap"
 
-\Input inode, map (f2fs_map_blocks 输出), offset, length, dio 标志
-\Output 填充完成的 iomap 结构体
-\State iomap.offset ← map.m_lblk 按块大小转换为字节偏移
-
-\If map.m_flags 包含 F2FS_MAP_MAPPED
-    \State iomap.length ← map.m_len 转换为字节长度
-    \If map.m_pblk ≠ NEW_ADDR
-        \State iomap.type ← IOMAP_MAPPED
-        \State iomap.flags ← iomap.flags | IOMAP_F_MERGED
-        \State iomap.addr ← map.m_pblk 转换为字节地址
+\Input inode, map, offset, length, dio
+\Output iomap
+\State iomap.offset <- F2FS_BLK_TO_BYTES(map.m_lblk)
+\If map has F2FS_MAP_MAPPED
+    \State iomap.length <- F2FS_BLK_TO_BYTES(map.m_len)
+    \If dio and map.m_pblk == NEW_ADDR
+        \Return -EINVAL
+    \EndIf
+    \If map.m_pblk != NEW_ADDR
+        \State iomap.type <- IOMAP_MAPPED; set IOMAP_F_MERGED
+        \State iomap.addr <- F2FS_BLK_TO_BYTES(map.m_pblk)
     \Else
-        \State iomap.type ← IOMAP_UNWRITTEN
-        \State iomap.addr ← IOMAP_NULL_ADDR
+        \State iomap.type <- IOMAP_UNWRITTEN; iomap.addr <- IOMAP_NULL_ADDR
     \EndIf
 \Else
-    \If dio 写路径
-        \Return 错误（DIO 写不允许空洞）
+    \If dio and write flag set
+        \Return -ENOTBLK
     \EndIf
     \If map.m_pblk == NULL_ADDR
-        \If map.m_flags 包含 F2FS_MAP_NODNODE
-            \State iomap.length ← m_next_pgofs 字节偏移 - iomap.offset
-        \Else
-            \State iomap.length ← map.m_len 转换为字节长度
-        \EndIf
-        \State iomap.type ← IOMAP_HOLE
+        \State iomap.length <- hole_end(map) - iomap.offset
+        \State iomap.type <- IOMAP_HOLE; iomap.addr <- IOMAP_NULL_ADDR
     \ElseIf map.m_pblk == NEW_ADDR
-        \State iomap.length ← map.m_len 转换为字节长度
-        \State iomap.type ← IOMAP_UNWRITTEN
+        \State iomap.length <- F2FS_BLK_TO_BYTES(map.m_len)
+        \State iomap.type <- IOMAP_UNWRITTEN; iomap.addr <- IOMAP_NULL_ADDR
+    \Else
+        \Return -EFAULT
     \EndIf
-    \State iomap.addr ← IOMAP_NULL_ADDR
 \EndIf
-
-\If map.m_flags 包含 F2FS_MAP_NEW
-    \State iomap.flags ← iomap.flags | IOMAP_F_NEW
+\If map has F2FS_MAP_NEW
+    \State set IOMAP_F_NEW
 \EndIf
-\If inode 含 I_DIRTY_DATASYNC 或 (offset + length > i_size)
-    \State iomap.flags ← iomap.flags | IOMAP_F_DIRTY
+\If inode is datasync-dirty or offset + length > i_size(inode)
+    \State set IOMAP_F_DIRTY
 \EndIf
-\Return 成功
+\Return 0
